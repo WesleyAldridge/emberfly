@@ -202,7 +202,7 @@
     #lower_table td {
         margin: auto;
         padding:0px 10px 10px 10px;
-        
+        touch-action: manipulation;
     }
     table {
         margin:auto;
@@ -311,7 +311,6 @@
 		letter-spacing: 0.01em;
 	}
     input {
-        width: 1.5ch;
     }
     .counter, .price  {
 		-moz-appearance: none;
@@ -439,10 +438,11 @@
         line-height: 1.2em;
         font-size: 1.2em;
 		letter-spacing: 0.01em;
+        touch-action: manipulation;
     }
 
     button.upgrade {
-        width:8em;
+        width:8ch;
         color: #f77000;
         line-height: 1.5em;
         font-size: 1.5em;
