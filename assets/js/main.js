@@ -122,7 +122,7 @@ function update() {
     counter = document.getElementById("farm_price");
     counter.value = farm_price;
     update_width(counter);
-
+    update_brightness();
     save();
 }
 
@@ -164,6 +164,25 @@ function buy(category) {
 
 function update_width(thing) {
     thing.style.width = thing.value.length + 1 + "ch";
+}
+
+function update_brightness() {
+    
+    var percent = firefly_count/100;
+    
+    if(percent > 3){
+        percent = 3;
+    }
+    
+    percent = percent / 10;
+    
+    
+    var wrapper = document.getElementById("wrapper");    
+    
+    wrapper.style.backgroundImage = "-moz-radial-gradient(rgba(200, 130, 20, " + percent.toString() + "), rgba(0, 0, 0, 0.1))";
+    wrapper.style.backgroundImage = "-webkit-radial-gradient(rgba(200, 130, 20, " + percent.toString() + "), rgba(0, 0, 0, 0.1))";
+    wrapper.style.backgroundImage = "-ms-radial-gradient(rgba(200, 130, 20, " + percent.toString() + "), rgba(0, 0, 0, 0.1))";
+    wrapper.style.backgroundImage = "radial-gradient(rgba(200, 130, 20, " + percent.toString() + "), rgba(0, 0, 0, 0.1))";     
 }
 
 function reset() {
