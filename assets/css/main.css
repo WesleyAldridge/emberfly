@@ -27,7 +27,7 @@
 		margin: 0;
 		padding: 0;
 		border: 0;
-        font-size: calc(12px + (18 - 12) * ((100vw - 300px) / (1600 - 300)));
+        font-size: calc(10px + (16 - 10) * ((100vw - 300px) / (1600 - 300)));
         line-height: calc(1.3em + (1.5 - 1.2) * ((100vw - 300px)/(1600 - 300)));
 		/*font-size: 16px; /* was 100% */*/
 		font: inherit;
@@ -489,29 +489,26 @@
 		max-width: 100%;
 		position: relative;
 		text-align: center;
-		width: 40em;
         /* phone width is about 480px */
 	}
         
         #emberfly {
-            width:150px;
-            height:150px;
+            width:calc(100px + (150 - 100) * ((100vw - 300px) / (1600 - 300)));
+            height:calc(100px + (150 - 100) * ((100vw - 300px) / (1600 - 300)));
             background: url("../../images/emberfly.png") repeat center center;
             position: relative;
             display:block;
             margin:0 auto;
-            background-size: 150px;
+            background-size: calc(100px + (150 - 100) * ((100vw - 300px) / (1600 - 300)));
             background-attachment: scroll;
         }
         #emberfly:hover, #emberfly:active {
-            width:150px;
-            height:150px;
             background: url("../../images/emberfly_glow.png") repeat center center;
             position: relative;
             display:block;
             padding:9;
             margin:0 auto;
-            background-size: 150px;
+            background-size: calc(100px + (150 - 100) * ((100vw - 300px) / (1600 - 300)));
             background-attachment: scroll;
         }
 		#main #emberfly:before {
