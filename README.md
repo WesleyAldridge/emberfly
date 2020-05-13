@@ -9,3 +9,4 @@ Languages used (so far): JavaScript, CSS, HTML
 - Convert similar HTML elements into React JS components
 - Add more buildings
 - Add upgrades
+- Add graphics for buildings/upgrades
