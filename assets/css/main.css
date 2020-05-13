@@ -9,6 +9,10 @@
 
 /* Icon (alt) */
 
+    .disable-dbl-tap-zoom {
+        touch-action: manipulation;
+    }
+
 	html, body, div, span, applet, object,
 	iframe, h1, h2, h3, h4, h5, h6, p, blockquote,
 	pre, a, abbr, acronym, address, big, cite,
@@ -23,10 +27,12 @@
 		margin: 0;
 		padding: 0;
 		border: 0;
-		font-size: 16px; /* was 100% */
+        font-size: calc(12px + (18 - 12) * ((100vw - 300px) / (1600 - 300)));
+        line-height: calc(1.3em + (1.5 - 1.2) * ((100vw - 300px)/(1600 - 300)));
+		/*font-size: 16px; /* was 100% */*/
 		font: inherit;
 		vertical-align: baseline;
-	}
+	} 
 
 	article, aside, details, figcaption, figure,
 	footer, header, hgroup, menu, nav, section {
@@ -144,15 +150,6 @@
 
 		}
 
-		@media screen and (max-width: 480px) {
-
-			body, input, select, textarea {
-				font-size: 10pt;
-				line-height: 1.75;
-			}
-
-		}
-
 	a {
 		-moz-transition: color 0.2s ease, border-color 0.2s ease;
 		-webkit-transition: color 0.2s ease, border-color 0.2s ease;
@@ -185,7 +182,6 @@
 	}
     
     .fireflies {
-        width:;
         color: #f77000;
 		line-height:2.5em;
         font-weight:bold;
@@ -343,6 +339,9 @@
 		margin: 0;
         text-align: center;
 	}
+    #firefly_counter {
+        width:10ch;
+    }
 
 	input[type="text"],
 	input[type="password"],
@@ -480,7 +479,7 @@
 /* Main */
 
 	#main {
-		padding: 4.5em 3em 3em 3em ;
+		padding: 3em 3em 3em 3em ;
 		background: rgba(200,200,200,0.1);
         
         border: 1px solid rgba(200,200,200,0.1);
@@ -491,6 +490,7 @@
 		position: relative;
 		text-align: center;
 		width: 40em;
+        /* phone width is about 480px */
 	}
         
         #emberfly {
@@ -602,3 +602,12 @@
 		body.is-ie #wrapper {
 			height: 100%;
 		}
+
+/* MOBILE DEVICES */
+
+@media (max-width: 600px) {
+
+    body, input, select, textarea, .count, .fireflies {
+    }
+
+}
