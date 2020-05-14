@@ -18,9 +18,9 @@ No fireflies/low level of fireflies:
 
 
 Medium level of fireflies:
-<img src="/screenshots/medium_flies.jpg" align="left" width="80%" >
+<img src="/screenshots/medium_flies.jpg" align="left" width="80%" display="block" >
 
 
 High level of fireflies:
-<img src="/screenshots/max_flies.jpgg" align="left" width="80%" >
+<img src="/screenshots/max_flies.jpgg" align="left" width="80%" display="block" >
 
