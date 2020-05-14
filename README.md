@@ -1,7 +1,12 @@
 # [emberfly.com](http://www.emberfly.com)
 
-# Currently only viewable in desktop browser. Will add the phone/tablet version in upcoming patch.
-
 Very early WIP of an idle game I am making inspired by Cookie Clicker.
 
 Languages used (so far): JavaScript, CSS, HTML
+
+
+## To-do:
+- Convert similar HTML elements into React JS components
+- Add more buildings
+- Add upgrades
+- Add graphics for buildings/upgrades
