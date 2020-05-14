@@ -10,3 +10,12 @@ Languages used (so far): JavaScript, CSS, HTML
 - Add more buildings
 - Add upgrades
 - Add graphics for buildings/upgrades
+
+## Dynamic Lighting System:
+
+![](/screenshots/no_flies.jpg "Low level of Fireflies")
+
+![](/screenshots/medium_flies.jpg "Medium level of Fireflies")
+
+![](/screenshots/max_flies.jpg "Maximum level of Fireflies")
+
