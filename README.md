@@ -13,7 +13,10 @@ Languages used (so far): JavaScript, CSS, HTML
 
 ## Dynamic Lighting System:
 
-![](/screenshots/no_flies.jpg "Low level of Fireflies")
+
+<img src="/screenshots/no_flies.jpg" align="left" height="50%" width="50%" >
+
+
 
 ![](/screenshots/medium_flies.jpg "Medium level of Fireflies")
 
