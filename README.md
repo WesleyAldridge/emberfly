@@ -14,7 +14,7 @@ Languages used (so far): JavaScript, CSS, HTML
 ## Dynamic Lighting System:
 
 No fireflies/low level of fireflies:
-<img src="/screenshots/no_flies.jpg" align="left" width="80%" >
+<img src="/screenshots/no_flies.jpg" align="left" width="80%" display="block" >
 
 
 Medium level of fireflies:
