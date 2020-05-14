@@ -7,7 +7,6 @@
 <html>
 
 <head>
-    <link href="fonts.googleapis.com/css2?family=DM+Mono&display=swap" rel="stylesheet">
     <script src="assets/js/main.js"></script>
     <title>Emberfly, Inc.</title>
     <meta charset="utf-8" />
@@ -36,7 +35,6 @@
                         <td>
                             <input class="fireflies" id="firefly_counter" disabled value=0>
                         </td>
-
                         <td>
                             <span class="fireflies">Fireflies</span>
                         </td>
@@ -86,7 +84,7 @@
                         </tr>
                         <tr>
                             <td>
-                                <input class="counter" id="jar_counter" disabled value="0">
+                                <input class="counter" id="jar_counter" title="Jars provide 1 firefly per second each." disabled value="0">
                             </td>
                             <td>
                                 <button class="building" name="Jar" onclick="buy(JAR)">
@@ -100,7 +98,7 @@
 
                         <tr>
                             <td>
-                                <input class="counter" id="farm_counter" disabled value="0">
+                                <input class="counter" id="farm_counter" disabled value="0" title="Farms provide 10 fireflies per second each.">
                             </td>
                             <td>
                                 <button class="building" name="Farm" onclick="buy(FARM)">

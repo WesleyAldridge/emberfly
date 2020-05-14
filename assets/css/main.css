@@ -2,6 +2,7 @@
 
     .disable-dbl-tap-zoom {
         touch-action: manipulation;
+        -webkit-tap-highlight-color:  rgba(255, 255, 255, 0);
     }
 
 	html, body, div, span, applet, object,
@@ -86,14 +87,14 @@
 	body {
 		height: 100%;
 		background-color: #000000;
-		background-image: -moz-linear-gradient(90deg, rgba(255, 165, 150, 0) 5%, rgba(0, 228, 255, 0.35)), url("../../images/bg2.jpg");
-		background-image: -webkit-linear-gradient(90deg, rgba(255, 165, 150, 0) 5%, rgba(0, 228, 255, 0.35)), url("../../images/bg2.jpg");
-		background-image: -ms-linear-gradient(90deg, rgba(0, 0, 0, 0.5) 5%, rgba(0, 0, 0, 0.35)), url("../../images/bg2.jpg");
-		background-image: linear-gradient(0deg, rgba(15, 0, 30, 0.0) 5%, rgba(0, 0, 0, 0.0)), url("../../images/stars.jpg");
-		background-repeat: repeat,			no-repeat,			no-repeat;
-		background-size: 100px 100px, cover,				cover;
-		background-position: top left,		center center,		bottom center;
-		background-attachment: fixed,			fixed,				fixed;
+        background-image: -moz-radial-gradient(rgba(200, 100, 20, 0), rgba(0, 0, 0, 0.1)), url("../../images/stars.jpg");
+        background-image: -webkit-radial-gradient(rgba(200, 100, 20, 0), rgba(0, 0, 0, 0.1)), url("../../images/stars.jpg");
+        background-image: -ms-radial-gradient(rgba(200, 100, 20, 0), rgba(0, 0, 0, 0.1)), url("../../images/stars.jpg");
+        background-image: radial-gradient(rgba(200, 100, 20, 0), rgba(0, 0, 0, 0.1)), url("../../images/stars.jpg");
+		background-repeat: repeat, no-repeat, no-repeat;
+		background-size: cover, cover;
+		background-position: top left, center center, bottom center;
+		background-attachment: fixed, fixed, fixed;
 	}
 
 		body:after {
@@ -104,7 +105,7 @@
 			left: 0;
 			width: 100%;
 			height: 100%;
-			opacity: 0.5;
+			opacity: 0.1;
 			z-index: 1;
 			background-color: transparent; /* For browsers that do not support gradients */
 			background-image: -moz-radial-gradient(rgba(200, 100, 20, 0.5), rgba(0, 0, 0, 0.5));
@@ -169,20 +170,20 @@
 	p {
 		margin: 0 0 1.5em 0;
 	}
-    
+
     .fireflies {
         color: #f77000;
-        background: -webkit-linear-gradient(top, #ebad00, #b71800);
-        background: -moz-linear-gradient(top, #ebad00, #b71800);
-        background: -ms-linear-gradient(top, #ebad00, #b71800);
-        background: linear-gradient(top, #ebad00, #b71800);
+        background: -webkit-linear-gradient(top, rgb(235,173,0), rgb(183,24,0));
+        background: -moz-linear-gradient(top, rgb(235,173,0), rgb(183,24,0));
+        background: -ms-linear-gradient(top, rgb(235,173,0), rgb(183,24,0));
+        background: linear-gradient(top, rgb(235,173,0), rgb(183,24,0));
         
         -webkit-background-clip: text;
         -ms-background-clip: text;
-        -webkit-text-fill-color: transparent;
         background-clip: text;
-        text-fill-color: transparent;
-        
+        -ms-text-fill-color: transparent;
+        -webkit-text-fill-color: transparent;
+        text-fill-color:transparent;
         
         font-size: 2.5em;
         line-height:2.5em;
@@ -204,6 +205,7 @@
         margin: auto;
         padding:0px 10px 10px 10px;
         touch-action: manipulation;
+        -webkit-tap-highlight-color:  rgba(255, 255, 255, 0);
     }
     table {
         margin:auto;
@@ -305,7 +307,7 @@
 	}
     
     td.title {
-		color: #e0eec7;
+		color: rgb(224,238,199);
 		line-height: 1.5em;
         font-size: 1.5em;
 		letter-spacing: 0.01em;
@@ -319,7 +321,7 @@
 		appearance: none;
         background-color:rgba(255,255,255,0.05);
 		border: none;
-		color: #ffe838;
+		color: rgb(255,232,56);
 		display: inline;
 		outline: 0;
         outline: none;
@@ -383,40 +385,6 @@
 		text-overflow: ellipsis;
 	}
 
-		select option {
-			color: #313f47;
-			background: #ffffff;
-		}
-
-		select:focus::-ms-value {
-			background-color: transparent;
-		}
-
-		select::-ms-expand {
-			display: none;
-		}
-
-	::-webkit-input-placeholder {
-		color: #616f77 !important;
-		opacity: 1.0;
-	}
-
-	:-moz-placeholder {
-		color: #616f77 !important;
-		opacity: 1.0;
-	}
-
-	::-moz-placeholder {
-		color: #616f77 !important;
-		opacity: 1.0;
-	}
-
-	:-ms-input-placeholder {
-		color: #616f77 !important;
-		opacity: 1.0;
-	}
-
-
 /* Button */
 
     button,    
@@ -439,6 +407,7 @@
         font-size: 1.2em;
 		letter-spacing: 0.01em;
         touch-action: manipulation;
+        -webkit-tap-highlight-color:  rgba(255, 255, 255, 0);
     }
 
     button.upgrade {
@@ -447,7 +416,7 @@
 
     button.building {
         width:8ch;
-        color: #f77000;
+        color: rgb(247,112,0);
         line-height: 1.5em;
         font-size: 1.5em;
 		letter-spacing: 0.01em;
@@ -477,10 +446,9 @@
 
 	#main {
 		padding: 3em 3em 3em 3em ;
-		background: rgba(200,200,200,0.1);
-        
         border: 1px solid rgba(200,200,200,0.1);
-        box-shadow: 0px -10px 50px 50px inset rgba(250, 200, 0, 0.05);
+        background: rgba(200,200,200,0.1);
+        box-shadow: 0px -10px 50px 50px inset rgba(250, 200, 0, 0.01);
 		border-radius: 20%;
 		cursor: default;
         width: calc(36em + (40 - 35) * ((100vw - 300px) / (1600 - 300)));
@@ -574,22 +542,14 @@
 		min-height: 100%;
 		padding: 1.5em;
 		z-index: 2;
-        
-        opacity: 1;
         background-color: transparent; /* For browsers that do not support gradients */
-        background-image: -moz-radial-gradient(rgba(200, 130, 20, 0.0), rgba(0, 0, 0, 0.1));
-        background-image: -webkit-radial-gradient(rgba(200, 130, 20, 0.0), rgba(0, 0, 0, 0.1));
-        background-image: -ms-radial-gradient(rgba(200, 130, 20, 0.0), rgba(0, 0, 0, 0.1));
-        background-image: radial-gradient(rgba(200, 130, 20, 0), rgba(0, 0, 0, 0.1));
+        background-image: -moz-radial-gradient(rgba(200, 130, 20, 0.0), rgba(0, 0, 0, 0));
+        background-image: -webkit-radial-gradient(rgba(200, 130, 20, 0.0), rgba(0, 0, 0, 0));
+        background-image: -ms-radial-gradient(rgba(200, 130, 20, 0.0), rgba(0, 0, 0, 0));
+        background-image: radial-gradient(rgba(200, 130, 20, 0), rgba(0, 0, 0, 0));
         background-repeat: repeat,			no-repeat;
         background-size: cover;
         background-position: top left,		center center;
-            
-        -moz-transition: opacity 1.75s ease-out;
-        -webkit-transition: opacity 1.75s ease-out;
-        -ms-transition: opacity 1.75s ease-out;
-        transition: opacity 1.75s ease-out;       
-        
 	}
 
 		#wrapper > * {
@@ -616,9 +576,6 @@
 /* MOBILE DEVICES */
 
 @media (max-width: 600px) {
-
-    body, input, select, textarea, .count, .fireflies {
-    }
 
 }
 

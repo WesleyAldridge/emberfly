@@ -162,27 +162,115 @@ function buy(category) {
     }
 }
 
+
+
+
 function update_width(thing) {
     thing.style.width = thing.value.length + 1 + "ch";
 }
 
+
+
+
 function update_brightness() {
     
-    var percent = firefly_count/100;
+    // Maximum brightness will be 0.3
     
-    if(percent > 3){
-        percent = 3;
+    var max_flies = 100000;
+    var percent = 1 * firefly_count/max_flies;
+    
+    if(percent > 1){
+        percent = 1;
     }
     
-    percent = percent / 10;
     
-    
-    var wrapper = document.getElementById("wrapper");    
+    var wrapper = document.getElementById("wrapper");
+    var main = document.getElementById("main");
     
     wrapper.style.backgroundImage = "-moz-radial-gradient(rgba(200, 130, 20, " + percent.toString() + "), rgba(0, 0, 0, 0.1))";
-    wrapper.style.backgroundImage = "-webkit-radial-gradient(rgba(200, 130, 20, " + percent.toString() + "), rgba(0, 0, 0, 0.1))";
+    wrapper.style.backgroundImage = "-webkit-radial-gradient(rgba(200, 100, 0, " + percent.toString() + "), rgba(0, 0, 0, 0.1))";
     wrapper.style.backgroundImage = "-ms-radial-gradient(rgba(200, 130, 20, " + percent.toString() + "), rgba(0, 0, 0, 0.1))";
-    wrapper.style.backgroundImage = "radial-gradient(rgba(200, 130, 20, " + percent.toString() + "), rgba(0, 0, 0, 0.1))";     
+    wrapper.style.backgroundImage = "radial-gradient(rgba(200, 100, 0, " + percent.toString() + "), rgba(0, 0, 0, 0.1))";  
+    
+    
+    main.style.background = "rgba(150,102,10," + percent/5 + ")";
+    main.style.boxShadow= "0px -10px 50px 50px inset rgba(250, 200, 50," + percent/3 + ")";  // 250, 200, 0
+    
+    //update_flies(percent);
+    update_font_colors(percent);
+}
+
+
+
+
+
+function update_font_colors(percent) {
+    
+    let rgb1 = [255 * percent + 235, 255 * percent + 173, 255 * percent + 0];
+    let rgb2 = [255 * percent + 183, 255 * percent + 24, 255 * percent + 0];
+    
+    function max255(num) {
+        if (num > 255) {
+            return 255;
+        }
+        else {
+            return Math.floor(num);
+        }
+    }
+    
+    function min0(num) {
+        if (num < 0) {
+            return 0;
+        }
+        else {
+            return Math.floor(num);
+        }
+    }
+    
+    var font = document.getElementsByClassName("fireflies");
+    for (let i = 0; i < font.length; i++) {
+        font[i].style.background = "-webkit-linear-gradient(top, rgb(" + max255(rgb1[0]) + "," + max255(rgb1[1]) + "," + max255(rgb1[2]) + "), rgb(" + max255(rgb2[0]) + "," + max255(rgb2[1]) + "," + max255(rgb2[2]) + "))";
+        font[i].style.background = "-moz-linear-gradient(top, rgb(" + max255(rgb1[0]) + "," + max255(rgb1[1]) + "," + max255(rgb1[2]) + "), rgb(" + max255(rgb2[0]) + "," + max255(rgb2[1]) + "," + max255(rgb2[2]) + "))";
+        font[i].style.background = "-ms-linear-gradient(top, rgb(" + max255(rgb1[0]) + "," + max255(rgb1[1]) + "," + max255(rgb1[2]) + "), rgb(" + max255(rgb2[0]) + "," + max255(rgb2[1]) + "," + max255(rgb2[2]) + "))";
+        font[i].style.background = "linear-gradient(top, rgb(" + max255(rgb1[0]) + "," + max255(rgb1[1]) + "," + max255(rgb1[2]) + "), rgb(" + max255(rgb2[0]) + "," + max255(rgb2[1]) + "," + max255(rgb2[2]) + "))";
+
+        font[i].style.webkitBackgroundClip = "text";
+        font[i].style.MozbackgroundClip = "text";
+        font[i].style.backgroundClip = "text";
+    }
+    
+    var font = document.getElementsByClassName("building");
+    for (let i = 0; i < font.length; i++) {
+        font[i].style.color = "rgb(" + max255(255*percent + 247) + "," + max255(255*percent + 112) + "," + max255(255*percent + 0) + ")";
+    }
+    
+    var font = document.getElementsByClassName("counter");
+    for (let i = 0; i < font.length; i++) {
+        font[i].style.color = "rgb(" + max255(255*percent + 255) + "," + max255(255*percent + 232) + "," + max255(255*percent + 56) + ")";
+    }
+    
+    var font = document.getElementsByClassName("price");
+    for (let i = 0; i < font.length; i++) {
+        font[i].style.color = "rgb(" + max255(255*percent + 255) + "," + max255(255*percent + 232) + "," + max255(255*percent + 56) + ")";
+    }
+    
+    var font = document.getElementsByClassName("title");
+    for (let i = 0; i < font.length; i++) {
+        font[i].style.color = "rgb(" + max255(255*percent + 224) + "," + max255(255*percent + 238) + "," + max255(255*percent + 199) + ")";
+    }   
+}
+
+
+
+
+
+
+function update_flies(percent) {
+    percent =  Math.floor(percent * 10);
+    
+    if(percent > 0) {
+    }
+    
 }
 
 function reset() {
