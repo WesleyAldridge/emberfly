@@ -14,7 +14,7 @@ Languages used (so far): JavaScript, CSS, HTML
 ## Dynamic Lighting System:
 
 
-<img src="/screenshots/no_flies.jpg" align="left" height="50%" width="50%" >
+<img src="/screenshots/no_flies.jpg" align="left" width="80%" >
 
 
 
