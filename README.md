@@ -13,12 +13,14 @@ Languages used (so far): JavaScript, CSS, HTML
 
 ## Dynamic Lighting System:
 
-
+No fireflies/low level of fireflies:
 <img src="/screenshots/no_flies.jpg" align="left" width="80%" >
 
 
+Medium level of fireflies:
+<img src="/screenshots/medium_flies.jpg" align="left" width="80%" >
 
-![](/screenshots/medium_flies.jpg "Medium level of Fireflies")
 
-![](/screenshots/max_flies.jpg "Maximum level of Fireflies")
+High level of fireflies:
+<img src="/screenshots/max_flies.jpgg" align="left" width="80%" >
 
