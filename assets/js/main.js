@@ -705,30 +705,62 @@ function set_tooltip(tip) {
     //temp.innerHTML = "" + tip;
     
     if(tip == "JAR") {
-        temp.innerHTML = "Jars catch 1 Firefly per second";
+        if(hasAnglerfish == 1 && hasGlowworms == 1)
+            temp.innerHTML = "Jars catch 4 per second";
+        else if(hasGlowworms == 1 || hasAnglerfish == 1)
+            temp.innerHTML = "Jars catch 2 per second";
+        else 
+            temp.innerHTML = "Jars catch 1 per second";
     }
     else if (tip == "NET") {
-        temp.innerHTML = "Nets catch 10 Fireflies per second";
+        if(hasAnglerfish == 1 && hasGlowworms == 1)
+            temp.innerHTML = "Nets catch 40 per second";
+        else if(hasGlowworms == 1 || hasAnglerfish == 1)
+            temp.innerHTML = "Nets catch 20 per second";
+        else 
+            temp.innerHTML = "Nets catch 10 per second";
         
     }
     else if (tip == "HATCHERY") {
-        temp.innerHTML = "Hatcheries incubate 100 Fireflies per second";
+        if(hasAnglerfish == 1 && hasGlowworms == 1)
+            temp.innerHTML = "Hatcheries incubate 400 per second";
+        else if(hasGlowworms == 1 || hasAnglerfish == 1)
+            temp.innerHTML = "Hatcheries incubate 200 per second";
+        else 
+            temp.innerHTML = "Hatcheries incubate 100 per second";
         
     }
     else if (tip == "JAR_FPS") {
-        temp.innerHTML = "Jars are catching " + jar_count * 1 +  " Fireflies per second";
-        
+        if(hasAnglerfish == 1 && hasGlowworms == 1)
+            temp.innerHTML = "Jars are catching " + format_value(jar_count * 4) +  " per second";
+        else if(hasGlowworms == 1 || hasAnglerfish == 1)
+            temp.innerHTML = "Jars are catching " + format_value(jar_count * 2) +  " per second";
+        else 
+            temp.innerHTML = "Jars are catching " + format_value(jar_count * 1) +  " per second";
     }
     else if (tip == "NET_FPS") {
-        temp.innerHTML = "Nets are catching " + net_count * 10 +  " Fireflies per second";
-        
+        if(hasAnglerfish == 1 && hasGlowworms == 1)
+            temp.innerHTML = "Nets are catching " + format_value(net_count * 40) +  " per second";
+        else if(hasGlowworms == 1 || hasAnglerfish == 1)
+            temp.innerHTML = "Nets are catching " + format_value(net_count * 20) +  " per second";
+        else 
+            temp.innerHTML = "Nets are catching " + format_value(net_count * 10) +  " per second"; 
     }
     else if (tip == "HATCHERY_FPS") {
-        temp.innerHTML = "Hatcheries are incubating " + hatchery_count * 100 +  " Fireflies per second";
-        
+        if(hasAnglerfish == 1 && hasGlowworms == 1)
+            temp.innerHTML = "Hatcheries are incubating " + format_value(hatchery_count * 400) +  " per second";
+        else if(hasGlowworms == 1 || hasAnglerfish == 1)
+            temp.innerHTML = "Hatcheries are incubating " + format_value(hatchery_count * 200) +  " per second";
+        else 
+            temp.innerHTML = "Hatcheries are incubating " + format_value(hatchery_count * 100) +  " per second"; 
     }
     
     else if (tip == "GLOWWORMS") {
+        temp.innerHTML = "2x catch rate, but...";
+        
+    }
+    
+    else if (tip == "ANGLERFISH") {
         temp.innerHTML = "2x catch rate, but...";
         
     }
