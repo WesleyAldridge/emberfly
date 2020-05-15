@@ -14,10 +14,14 @@
     <link rel="stylesheet" href="assets/css/main.css" />
     <link rel="shortcut icon" href="images/favicon.ico">
     <link rel="preload" href="images/emberfly_glow.png" as="image">
+    <link rel="preload" href="images/worm_glow.png" as="image">
 </head>
 
 
 <body>
+
+    <div id="background_gradient">
+    </div>
 
     <!-- Wrapper -->
     <div id="wrapper">
@@ -28,15 +32,17 @@
 
                 <a href="#" onclick="add()">
                     <div class="disable-dbl-tap-zoom" id="emberfly"></div>
+                    <div class="disable-dbl-tap-zoom" id="glowworm"></div>
+                    <div class="disable-dbl-tap-zoom" id="anglerfish"></div>
                 </a>
 
                 <table>
                     <tr>
                         <td>
-                            <input class="fireflies" id="firefly_counter" disabled value=0>
+                            <input class="fireflies" id="firefly_counter" disabled value="0">
                         </td>
                         <td>
-                            <span class="fireflies">Fireflies</span>
+                            <span class="fireflies" id="fireflies_text">Fireflies</span>
                         </td>
                     </tr>
                 </table>
@@ -44,84 +50,129 @@
 
 
 
-                
-                
 
-                    <!-- <button name="save" onclick="save()">
+
+
+                <!-- <button name="save" onclick="save()">
                         Save
                     </button>
 
                     <button name="load" onclick="load()">
                         load
                     </button> -->
+
+
+
+                <!-- UPGRADES -->
+
+
+                <button class="upgrade disable-dbl-tap-zoom" name="glowworms" disabled onclick="buy(GLOWWORMS)" onmouseover="set_tooltip('GLOWWORMS')" onmouseout="set_tooltip('BLANK')">
+                    Glow Worms
+                </button>
+
+                <button class="upgrade disable-dbl-tap-zoom" name="anglerfish" disabled onclick="buy(ANGLERFISH)">
+                    Angler Fish
+                </button>
+                <br>
+                <br>
+
+
+                <!-- BUILDINGS -->
+
+
+                <table id="lower_table">
                     
-                
-                
-                    <!-- UPGRADES -->
-                
-                
-                    <button class="upgrade disable-dbl-tap-zoom" name="glowworms" disabled onclick="#" style="opacity:0.5">
-                        glow worms
-                    </button>
-                    <br>
-                    <br>
-                
+                    <!-- LABELS -->
+                    <tr>
+                        <td class="title">
+                            Count
+                        </td>
+                        <td class="title">
+                            Building
+                        </td>
+                        <td class="title">
+                            Price
+                        </td>
+                    </tr>
+                    
+                    
+                    <!-- JARS -->
+                    <tr>
+                        <td>
+                            <div onmouseover="set_tooltip('JAR_FPS')" onmouseout="set_tooltip('BLANK')"><input class="counter" id="jar_counter" disabled value="0"></div>
+                        </td>
+                        <td>
+                            <button class="building" name="Jar" onclick="buy(JAR)" onmouseover="set_tooltip('JAR')" onmouseout="set_tooltip('BLANK')">
+                                Jar
+                            </button>
+                        </td>
+                        <td>
+                            <input class="price" id="jar_price" disabled value="10">
+                        </td>
+                    </tr>
 
-                    <!-- BUILDINGS -->
-
-
-                    <table id="lower_table">
-                        <tr>
-                            <td class="title">
-                                Count
-                            </td>
-                            <td class="title">
-                                Building
-                            </td>
-                            <td class="title">
-                                Price
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <input class="counter" id="jar_counter" title="Jars provide 1 firefly per second each." disabled value="0">
-                            </td>
-                            <td>
-                                <button class="building" name="Jar" onclick="buy(JAR)">
-                                    Jars
-                                </button>
-                            </td>
-                            <td>
-                                <input class="price" id="jar_price" disabled value="10">
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td>
-                                <input class="counter" id="farm_counter" disabled value="0" title="Farms provide 10 fireflies per second each.">
-                            </td>
-                            <td>
-                                <button class="building" name="Farm" onclick="buy(FARM)">
-                                    Farms
-                                </button>
-                            </td>
-                            <td>
-                                <input class="price" id="farm_price" disabled value="2000">
-                            </td>
-                        </tr>
-                    </table>
+                    
+                    
+                    <!-- NETS -->
+                    <tr>
+                        <td>
+                            <div onmouseover="set_tooltip('NET_FPS')" onmouseout="set_tooltip('BLANK')"><input class="counter" id="net_counter" disabled value="0"></div>
+                        </td>
+                        <td>
+                            <button class="building" name="Net" onclick="buy(NET)" onmouseover="set_tooltip('NET')" onmouseout="set_tooltip('BLANK')">
+                                Net
+                            </button>
+                        </td>
+                        <td>
+                            <input class="price" id="net_price" disabled value="2000">
+                        </td>
+                    </tr>
+                    
+                    
+                    
+                    <!-- HATCHERIES -->
+                    <tr>
+                        <td>
+                            <div onmouseover="set_tooltip('HATCHERY_FPS')" onmouseout="set_tooltip('BLANK')"><input class="counter" id="hatchery_counter" disabled value="0"></div>
+                        </td>
+                        <td>
+                            <button class="building" name="Hatchery" onclick="buy(HATCHERY)" onmouseover="set_tooltip('HATCHERY')" onmouseout="set_tooltip('BLANK')">
+                                Hatchery
+                            </button>
+                        </td>
+                        <td>
+                            <input class="price" id="hatchery_price" disabled value="25000">
+                        </td>
+                    </tr>
+                    
+                </table>
                 <br />
                 <br />
-                <button name="reset" class="upgrade" onclick="reset()">
-                        reset
-                    </button>
+
+                <button name="sell_upgrades" class="reset" onclick="reset_upgrades()">
+                    reset upgrades
+                </button>
+
+
+                <button name="reset" class="reset" onclick="reset()">
+                    reset everything
+                </button>
             </header>
-            
-						
+
+
             <footer>
                 <!-- could put buttons here -->
             </footer>
         </section>
+
+
+
+        <!-- TOOLTIP BOX BENEATH MAIN -->
+        <div class="tooltipbar"><span id="tooltip">
+                The world is dark
+            </span></div>
+
+
 
         <!-- Footer -->
         <footer id="footer">
@@ -130,4 +181,6 @@
 
     </div>
 
-</body></html>
+</body>
+
+</html>
