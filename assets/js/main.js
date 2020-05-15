@@ -66,6 +66,12 @@ var tooltips = ["The world is dark",
 
 
 
+function calculate_reward() {
+    
+}
+
+
+
 function format_value(num) {
     // Input:  number 
     // output: string
@@ -672,26 +678,19 @@ function timer() {
     // so Jars give 1 Fps. So here put 0.25 * jar_count.
     
     
-    if(hasAnglerfish == 1 || hasAnglerfish == "1") {
-        firefly_count = firefly_count
-                        + 4 * (
-                        + 0.25 * jar_count
-                        + 2.5 * net_count
-                        + 25 * hatchery_count);
-    }
-    else if(hasGlowworms == 1 || hasGlowworms == "1") {
-        firefly_count = firefly_count
-                        + 2 * (
-                        + 0.25 * jar_count
-                        + 2.5 * net_count
-                        + 25 * hatchery_count);
-    }
-    else {
-        firefly_count = firefly_count
-                        + 0.25 * jar_count
-                        + 2.5 * net_count
-                        + 25 * hatchery_count;
-    }
+    let new_flies = 0.25 * jar_count
+                    + 2.5 * net_count
+                    + 25 * hatchery_count;
+    
+    
+    if(hasAnglerfish == 1 && hasGlowworms == 1)
+        firefly_count = firefly_count + Math.pow(new_flies, 1.2);
+    
+    else if(hasGlowworms == 1 || hasAnglerfish == 1) 
+        firefly_count = firefly_count + Math.pow(new_flies, 1.1);
+    
+    else
+        firefly_count = firefly_count + new_flies;
     
     
     update();

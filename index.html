@@ -102,9 +102,11 @@
                             <div onmouseover="set_tooltip('JAR_FPS')" onmouseout="set_tooltip('BLANK')"><input class="counter" id="jar_counter" disabled value="0"></div>
                         </td>
                         <td>
-                            <button class="building" name="Jar" onclick="buy(JAR)" onmouseover="set_tooltip('JAR')" onmouseout="set_tooltip('BLANK')">
-                                Jar
-                            </button>
+                            <div onmouseover="set_tooltip('JAR')" onmouseout="set_tooltip('BLANK')">
+                                <button class="building" name="Jar" onclick="buy(JAR)" >
+                                    Jar
+                                </button>
+                            </div>
                         </td>
                         <td>
                             <input class="price" id="jar_price" disabled value="10">
@@ -116,12 +118,16 @@
                     <!-- NETS -->
                     <tr>
                         <td>
-                            <div onmouseover="set_tooltip('NET_FPS')" onmouseout="set_tooltip('BLANK')"><input class="counter" id="net_counter" disabled value="0"></div>
+                            <div onmouseover="set_tooltip('NET_FPS')" onmouseout="set_tooltip('BLANK')">
+                                <input class="counter" id="net_counter" disabled value="0">
+                            </div>
                         </td>
                         <td>
-                            <button class="building" name="Net" onclick="buy(NET)" onmouseover="set_tooltip('NET')" onmouseout="set_tooltip('BLANK')">
-                                Net
-                            </button>
+                            <div onmouseover="set_tooltip('NET')" onmouseout="set_tooltip('BLANK')">
+                                <button class="building" name="Net" onclick="buy(NET)" >
+                                    Net
+                                </button>
+                            </div>
                         </td>
                         <td>
                             <input class="price" id="net_price" disabled value="2000">
@@ -133,12 +139,16 @@
                     <!-- HATCHERIES -->
                     <tr>
                         <td>
-                            <div onmouseover="set_tooltip('HATCHERY_FPS')" onmouseout="set_tooltip('BLANK')"><input class="counter" id="hatchery_counter" disabled value="0"></div>
+                            <div onmouseover="set_tooltip('HATCHERY_FPS')" onmouseout="set_tooltip('BLANK')">
+                                <input class="counter" id="hatchery_counter" disabled value="0">
+                            </div>
                         </td>
                         <td>
-                            <button class="building" name="Hatchery" onclick="buy(HATCHERY)" onmouseover="set_tooltip('HATCHERY')" onmouseout="set_tooltip('BLANK')">
+                            <div onmouseover="set_tooltip('HATCHERY')" onmouseout="set_tooltip('BLANK')">
+                                <button class="building" name="Hatchery" onclick="buy(HATCHERY)">
                                 Hatchery
-                            </button>
+                                </button>
+                            </div>
                         </td>
                         <td>
                             <input class="price" id="hatchery_price" disabled value="25000">
