@@ -505,7 +505,7 @@ function buy(category) {
             
             firefly_count -= BASE_ANGLERFISH_PRICE;
             hasAnglerfish = 1;
-            max_flies = 10000000;
+            max_flies = 100000000; // 10M
             
             temp = document.getElementById("fireflies_text");
             temp.innerHTML = "Angler Fish";
