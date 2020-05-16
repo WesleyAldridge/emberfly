@@ -10,7 +10,7 @@ const BASE_NET_PRICE = 1000;
 const BASE_HATCHERY_COUNT = 0;
 const BASE_HATCHERY_PRICE = 25000;
 
-const BASE_GLOWWORMS_PRICE =    100000;
+const BASE_GLOWWORMS_PRICE =    200000;   // 100k
 const BASE_ANGLERFISH_PRICE = 10000000;
 
 
@@ -529,16 +529,41 @@ function update_width(thing) {
 
 
 
+function calculate_brightness() {
+    let percent =  1 * firefly_count / max_flies;
+
+    if (percent < 0.3) {
+        percent = percent * 2;
+        if(percent > 0.3) {
+            percent = 0.3;
+            return percent;
+        }
+    }
+    
+    else if (percent < 0.5) {
+        percent = percent * 1.5;
+        if(percent > 0.5) {
+            percent = 0.5;
+            return percent;
+        }
+    }
+    
+    else if (percent > 1) {
+        percent = 1;
+        return percent;
+    }
+    
+    return percent;
+}
+
+
+
 function update_brightness() {
 
     // max_flies = # of flies required to reach 100% brightness
-    var percent = 1 * firefly_count / max_flies;
-
-    if (percent > 1) {
-        percent = 1;
-    }
-
-
+    var percent = calculate_brightness();
+    
+    
     var wrapper = document.getElementById("wrapper");
     var main = document.getElementById("main");
     var temp = document.getElementById("background_gradient");
@@ -823,24 +848,40 @@ function set_tooltip(tip) {
     //temp.innerHTML = "" + tip;
     
     if(tip == "JAR") {
-        temp.innerHTML = "Jars catch " + format_value(calculate_building_reward("JAR")) + " per second";
+        if(jar_count > 0)
+            temp.innerHTML = "Jars catch " + format_value(calculate_building_reward("JAR")) + " per second";
+        else 
+            temp.innerHTML = "Jars catch " + format_value(BASE_JAR_REWARD) + " per second";
     }
     else if (tip == "NET") {
-        temp.innerHTML = "Nets catch " + format_value(calculate_building_reward("NET")) + " per second";
-        
+        if(net_count > 0)
+            temp.innerHTML = "Nets catch " + format_value(calculate_building_reward("NET")) + " per second";
+        else 
+            temp.innerHTML = "Nets catch " + format_value(BASE_NET_REWARD) + " per second";
     }
     else if (tip == "HATCHERY") {
-        temp.innerHTML = "Hatcheries incubate " + format_value(calculate_building_reward("HATCHERY")) + " per second";
-        
+        if(hatchery_count > 0)
+            temp.innerHTML = "Hatcheries incubate " + format_value(calculate_building_reward("HATCHERY")) + " per second";
+        else 
+            temp.innerHTML = "Hatcheries incubate " + format_value(BASE_HATCHERY_REWARD) + " per second";  
     }
     else if (tip == "JAR_FPS") {
-        temp.innerHTML = "Jars are catching " + format_value(calculate_building_reward("JAR")*jar_count) + " per second";
+        if(jar_count > 0)
+            temp.innerHTML = "Jars are catching " + format_value(calculate_building_reward("JAR")*jar_count) + " per second";
+        else 
+            temp.innerHTML = "Jars are catching " + format_value(BASE_JAR_REWARD*jar_count) + " per second";
     }
     else if (tip == "NET_FPS") {
-        temp.innerHTML = "Nets are catching " + format_value(calculate_building_reward("NET")*net_count) + " per second";
+        if(net_count > 0)
+            temp.innerHTML = "Nets are catching " + format_value(calculate_building_reward("NET")*net_count) + " per second";
+        else 
+            temp.innerHTML = "Nets are catching " + format_value(BASE_NET_REWARD*net_count) + " per second";
     }
     else if (tip == "HATCHERY_FPS") {
-        temp.innerHTML = "Hatcheries are incubating " + format_value(calculate_building_reward("HATCHERY")*hatchery_count) + "/sec"; 
+        if(hatchery_count > 0)
+            temp.innerHTML = "Hatcheries are incubating " + format_value(calculate_building_reward("HATCHERY")*hatchery_count) + "/sec";
+        else 
+            temp.innerHTML = "Hatcheries are incubating " + format_value(BASE_HATCHERY_REWARD*hatchery_count) + "/sec";
     }
     
     else if (tip == "GLOWWORMS") {
@@ -862,6 +903,25 @@ function set_tooltip(tip) {
         temp.innerHTML = "&nbsp;";
     }
     
+    else if (tip == "COUNT") {
+        temp.innerHTML = "You have " + (jar_count + net_count + hatchery_count) + " buildings";
+        
+    }
+    
+    else if (tip == "BUILDING") {
+        temp.innerHTML = "Total production is  " + format_value(calculate_reward(1)) + " per second";
+        
+    }
+    
+    else if (tip == "PRICE") {
+        temp.innerHTML = " ";
+        
+    }
+    
+    else if (tip == "CLICKING") {
+        temp.innerHTML = "You catch 1 at a time";
+        
+    }
     
 }
 

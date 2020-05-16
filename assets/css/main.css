@@ -1,8 +1,15 @@
 @import url('https://fonts.googleapis.com/css2?family=DM+Mono&display=swap');
 
-    .disable-dbl-tap-zoom {
+    * {
         touch-action: manipulation;
         -webkit-tap-highlight-color:  rgba(255, 255, 255, 0);
+        -webkit-touch-callout: none; /* iOS Safari */
+          -webkit-user-select: none; /* Safari */
+           -khtml-user-select: none; /* Konqueror HTML */
+             -moz-user-select: none; /* Old versions of Firefox */
+              -ms-user-select: none; /* Internet Explorer/Edge */
+                  user-select: none; /* Non-prefixed version, currently
+                                        supported by Chrome, Edge, Opera and Firefox */
     }
 
 	html, body, div, span, applet, object,
@@ -60,9 +67,13 @@
 		-webkit-appearance: none;
 		-ms-appearance: none;
 		appearance: none;
+        opacity: 1;
 	}
 
     input:disabled {
+        -webkit-text-fill-color: none;
+        color:inherit;
+        opacity: 1; /* required on iOS */
         -webkit-touch-callout: none; /* iOS Safari */
           -webkit-user-select: none; /* Safari */
            -khtml-user-select: none; /* Konqueror HTML */
@@ -288,7 +299,7 @@
 		text-decoration: none;
 		line-height: 1.3em;
 		font-size: 1.3em;
-		letter-spacing: 0.1em;
+		letter-spacing: 0em;
 		margin: 0;
         
         
@@ -421,6 +432,9 @@
         vertical-align: middle;
         /* phone width is about 480px */
 	}
+        #emberfly_link {
+            cursor: default;
+        }
         
         #emberfly {
             width:calc(100px + (150 - 100) * ((100vw - 300px) / (1600 - 300)));
@@ -442,6 +456,12 @@
             margin:0 auto;
             background-size: calc(100px + (150 - 100) * ((100vw - 300px) / (1600 - 300)));
             background-attachment: scroll;
+            cursor: -webkit-grab;
+            cursor: grab;
+        }
+        #emberfly:active, emberfly:focus {
+            cursor: -webkit-grabbing;
+            cursor: grabbing;
         }
 
 
@@ -465,7 +485,14 @@
             margin:0 auto;
             background-size: calc(100px + (150 - 100) * ((100vw - 300px) / (1600 - 300)));
             background-attachment: scroll;
+            cursor: -webkit-grab;
+            cursor: grab;
         }
+        #glowworm:active, glowworm:focus {
+            cursor: -webkit-grabbing;
+            cursor: grabbing;
+        }
+
 
 
         #anglerfish {
@@ -488,9 +515,15 @@
             margin:0 auto;
             background-size: calc(100px + (150 - 100) * ((100vw - 300px) / (1600 - 300)));
             background-attachment: scroll;
+            cursor: -webkit-grab;
+            cursor: grab;
+        }
+        #anglerfish:active, anglerfish:focus {
+            cursor: -webkit-grabbing;
+            cursor: grabbing;
         }
 
-			
+
 
 		@media screen and (max-width: 480px) {
 
@@ -613,7 +646,7 @@
     font-family: Arial, sans-serif;
     font-size: 1.1em;
     font-weight: bold;
-    text-shadow: 0px 0px 0.5em rgba(255,255,255,0.7);
+    text-shadow: 0px 0px 0.5em rgba(255,255,255,0.35);
     color: black;
 }
 

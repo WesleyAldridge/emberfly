@@ -30,12 +30,14 @@
         <section id="main" class="disable-dbl-tap-zoom">
             <header>
 
-                <a href="#" onclick="add()">
-                    <div class="disable-dbl-tap-zoom" id="emberfly" onmouseover="set_tooltip('TOTAL_FPS')" onmouseout="set_tooltip('BLANK')"></div>
+                <a href="#" onclick="add()" draggable="false" id="emberfly_link">
+                    <div class="disable-dbl-tap-zoom" id="emberfly"
+                    draggable="false" 
+                    onmouseover="set_tooltip('CLICKING')" onmouseout="set_tooltip('BLANK')"></div>
                     
-                    <div class="disable-dbl-tap-zoom" id="glowworm" onmouseover="set_tooltip('TOTAL_FPS')" onmouseout="set_tooltip('BLANK')"></div>
+                    <div class="disable-dbl-tap-zoom" id="glowworm" onmouseover="set_tooltip('CLICKING')" onmouseout="set_tooltip('BLANK')"></div>
                     
-                    <div class="disable-dbl-tap-zoom" id="anglerfish" onmouseover="set_tooltip('TOTAL_FPS')" onmouseout="set_tooltip('BLANK')"></div>
+                    <div class="disable-dbl-tap-zoom" id="anglerfish" onmouseover="set_tooltip('CLICKING')" onmouseout="set_tooltip('BLANK')"></div>
                 </a>
 
                 <table>
@@ -87,13 +89,13 @@
                     <!-- LABELS -->
                     <tr>
                         <td class="title">
-                            Count
+                            <div onmouseover="set_tooltip('COUNT')" onmouseout="set_tooltip('BLANK')">Count</div>
                         </td>
                         <td class="title">
-                            Building
+                            <div onmouseover="set_tooltip('BUILDING')" onmouseout="set_tooltip('BLANK')">Building</div>
                         </td>
                         <td class="title">
-                            Price
+                            <div onmouseover="set_tooltip('PRICE')" onmouseout="set_tooltip('BLANK')">Price</div>
                         </td>
                     </tr>
                     
@@ -113,7 +115,9 @@
                             </div>
                         </td>
                         <td>
+                            <div onmouseover="set_tooltip('JAR')" onmouseout="set_tooltip('BLANK')">
                             <input class="price" id="jar_price" disabled value="10">
+                            </div>
                         </td>
                     </tr>
 
@@ -134,7 +138,9 @@
                             </div>
                         </td>
                         <td>
+                            <div onmouseover="set_tooltip('NET')" onmouseout="set_tooltip('BLANK')">
                             <input class="price" id="net_price" disabled value="2000">
+                            </div>
                         </td>
                     </tr>
                     
@@ -155,7 +161,9 @@
                             </div>
                         </td>
                         <td>
+                            <div onmouseover="set_tooltip('HATCHERY')" onmouseout="set_tooltip('BLANK')">
                             <input class="price" id="hatchery_price" disabled value="25000">
+                            </div>
                         </td>
                     </tr>
                     
