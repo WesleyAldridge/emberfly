@@ -62,13 +62,6 @@ var upgrade_names = ["glowworms", "anglerfish"];
 
 
 
-var tooltips = ["The world is dark",
-                "You find a Firefly",
-                "Jars catch 1 Firefly per second",
-                "Glowing worms spring forth from the earth"];
-
-
-
 
 
 function calculate_reward(seconds) {
@@ -344,7 +337,6 @@ function update() {
 
 
 function update_upgrades() {
-    //document.getElementsByClassName("upgrade").disabled = false;
 
     
     if (hasGlowworms == 0) {
@@ -358,27 +350,39 @@ function update_upgrades() {
             temp.style.opacity = 0.5;
             temp.disabled = true;
         }
-
+        
+        
+        // if don't have glowworms yet, 
+        // disable all other upgrades
+        // I want players to buy them in order.
+        // worms > fish > whatever's next
+        
+        temp = document.getElementsByName("anglerfish")[0];
+        temp.style.opacity = 0.5;
+        temp.disabled = true;
     }
+    
     else {
         let temp = document.getElementsByName("glowworms")[0];
         temp.disabled = true;
         temp.style.display = "none";
         temp.style.opacity = 0;
         hasGlowworms = 1;
-        
-        // change firefly to glow worm
-        set_click_image("glowworm");
     }
     
     
     if (hasAnglerfish == 0) {
+        // Disable upgrade buttons if can't afford
 
         let temp = document.getElementsByName("anglerfish")[0];
         if (firefly_count >= BASE_ANGLERFISH_PRICE) {
-            temp.disabled = false;
-            temp.style.display = "inline-block";
-            temp.style.opacity = 1;
+            // display only if previous upgrade(s) 
+            // has/have been bought already
+            if(hasGlowworms == 1) {
+                temp.disabled = false;
+                temp.style.display = "inline-block";
+                temp.style.opacity = 1;
+            }
         }
         else {
             temp.style.opacity = 0.5;
@@ -408,9 +412,6 @@ function update_buildings() {
 }
 
 
-function update_story() {
-    
-}
 
 
 
@@ -478,13 +479,13 @@ function buy(category) {
             
             firefly_count -= BASE_GLOWWORMS_PRICE;
             hasGlowworms = 1;
-            max_flies = 10000000;
+            max_flies = 10000000; // 10 million
             
             temp = document.getElementById("fireflies_text");
             temp.innerHTML = "Glow Worms";
             
             temp = document.getElementById("tooltip");
-            temp.innerHTML = "Glowing worms spring forth from the earth";
+            temp.innerHTML = "Glowing worms writhe in the earth";
             
             set_click_image("glowworm");
         }
@@ -504,7 +505,15 @@ function buy(category) {
             
             firefly_count -= BASE_ANGLERFISH_PRICE;
             hasAnglerfish = 1;
-
+            max_flies = 10000000;
+            
+            temp = document.getElementById("fireflies_text");
+            temp.innerHTML = "Angler Fish";
+            
+            temp = document.getElementById("tooltip");
+            temp.innerHTML = "The seas teem with glowing fish";
+                              
+            set_click_image("anglerfish");
         }
         
     }
@@ -630,8 +639,8 @@ function update_font_colors(percent) {
     
     if (hasAnglerfish == 1) {
         
-        let rgb1 = [255 * percent + 235, 255 * percent + 173, 255 * percent + 0];
-        let rgb2 = [255 * percent + 183, 255 * percent + 24, 255 * percent + 0];
+        let rgb1 = [255 * percent + 50, 255 * percent + 50, 255 * percent + 255];
+        let rgb2 = [255 * percent + 100, 255 * percent + 0, 255 * percent + 100];
         
         change_firefly_font(rgb1, rgb2);
     }
@@ -789,7 +798,7 @@ function reset_upgrades() {
     temp.innerHTML = "Fireflies";
             
     temp = document.getElementById("tooltip");
-    temp.innerHTML = "The world is dark";
+    temp.innerHTML = "Fireflies flutter in our midst";
     
 }
 
@@ -831,16 +840,16 @@ function set_tooltip(tip) {
         temp.innerHTML = "Nets are catching " + format_value(calculate_building_reward("NET")*net_count) + " per second";
     }
     else if (tip == "HATCHERY_FPS") {
-        temp.innerHTML = "Hatcheries are incubating " + format_value(calculate_building_reward("HATCHERY")*hatchery_count) + " per second"; 
+        temp.innerHTML = "Hatcheries are incubating " + format_value(calculate_building_reward("HATCHERY")*hatchery_count) + "/sec"; 
     }
     
     else if (tip == "GLOWWORMS") {
-        temp.innerHTML = "2x catch rate, but...";
+        temp.innerHTML = "Worms.. that glow";
         
     }
     
     else if (tip == "ANGLERFISH") {
-        temp.innerHTML = "2x catch rate, but...";
+        temp.innerHTML = "Perhaps these could be useful?";
         
     }
     
