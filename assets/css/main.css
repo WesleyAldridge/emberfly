@@ -161,7 +161,7 @@
         text-fill-color:transparent;
         
         font-size: 2.0em;
-        line-height:2.5em;
+        line-height:2.0em;
 		letter-spacing: 0.0em;
         border:none;
         z-index: inherit;
@@ -406,7 +406,7 @@
 /* Main */
 
 	#main {
-		padding: 3em ;
+		padding: 2em 3em 3em 3em ;
         border: 1px solid rgba(200,200,200,0.1);
         background: rgba(200,200,200,0.1);
         box-shadow: 0px -10px 50px 50px inset rgba(250, 200, 0, 0.01);
@@ -438,7 +438,7 @@
             background-image: url("../../images/emberfly_glow.png");
             position: relative;
             display:block;
-            padding:9;
+            padding:0;
             margin:0 auto;
             background-size: calc(100px + (150 - 100) * ((100vw - 300px) / (1600 - 300)));
             background-attachment: scroll;
@@ -495,7 +495,7 @@
 		@media screen and (max-width: 480px) {
 
 			#main {
-				padding: 4em 2em 2.5em 2em ;
+				padding: 2em 2em 2.5em 2em ;
 				width: 100%;
 			}
 		}

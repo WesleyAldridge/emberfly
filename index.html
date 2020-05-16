@@ -31,9 +31,11 @@
             <header>
 
                 <a href="#" onclick="add()">
-                    <div class="disable-dbl-tap-zoom" id="emberfly"></div>
-                    <div class="disable-dbl-tap-zoom" id="glowworm"></div>
-                    <div class="disable-dbl-tap-zoom" id="anglerfish"></div>
+                    <div class="disable-dbl-tap-zoom" id="emberfly" onmouseover="set_tooltip('TOTAL_FPS')" onmouseout="set_tooltip('BLANK')"></div>
+                    
+                    <div class="disable-dbl-tap-zoom" id="glowworm" onmouseover="set_tooltip('TOTAL_FPS')" onmouseout="set_tooltip('BLANK')"></div>
+                    
+                    <div class="disable-dbl-tap-zoom" id="anglerfish" onmouseover="set_tooltip('TOTAL_FPS')" onmouseout="set_tooltip('BLANK')"></div>
                 </a>
 
                 <table>
@@ -99,7 +101,9 @@
                     <!-- JARS -->
                     <tr>
                         <td>
-                            <div onmouseover="set_tooltip('JAR_FPS')" onmouseout="set_tooltip('BLANK')"><input class="counter" id="jar_counter" disabled value="0"></div>
+                            <div onmouseover="set_tooltip('JAR_FPS')" onmouseout="set_tooltip('BLANK')">
+                                <input class="counter" id="jar_counter" disabled value="0">
+                            </div>
                         </td>
                         <td>
                             <div onmouseover="set_tooltip('JAR')" onmouseout="set_tooltip('BLANK')">

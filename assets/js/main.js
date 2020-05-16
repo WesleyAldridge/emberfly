@@ -24,6 +24,11 @@ const GLOWWORMS = 4;
 const ANGLERFISH = 5;
 
 
+const BASE_JAR_REWARD = 1;
+const BASE_NET_REWARD = 10;
+const BASE_HATCHERY_REWARD = 100;
+
+
 
 var firefly_count = BASE_FIREFLY_COUNT;
 
@@ -66,9 +71,61 @@ var tooltips = ["The world is dark",
 
 
 
-function calculate_reward() {
+function calculate_reward(seconds) {
     
+    let new_flies =     1 * jar_count
+                    +  10 * net_count
+                    + 100 * hatchery_count;
+    
+    let reward;
+    
+    
+    if(hasAnglerfish == 1 && hasGlowworms == 1)
+        reward = Math.pow(Math.pow(new_flies, 1.2), 1.2) * seconds;
+    
+    else if(hasGlowworms == 1 || hasAnglerfish == 1) 
+        reward = Math.pow(new_flies, 1.2) * seconds;
+    
+    else
+        reward = new_flies * seconds;
+    
+    return reward;
 }
+
+
+function calculate_building_reward(building) {
+    
+    let reward = 1;
+    let total_reward = calculate_reward(1); // 1 second of game time
+    
+    let building_contribution;
+    let total_contribution;
+    
+    total_contribution =  BASE_JAR_REWARD * jar_count
+                        + BASE_NET_REWARD * net_count
+                        + BASE_HATCHERY_REWARD * hatchery_count;
+    
+    if (building == "JAR")
+        building_contribution = BASE_JAR_REWARD * jar_count;
+    else if (building == "NET")
+        building_contribution = BASE_NET_REWARD * net_count;
+    else if (building == "HATCHERY")
+        building_contribution = BASE_HATCHERY_REWARD * hatchery_count;
+    
+    let proportion = building_contribution / total_contribution;
+    
+    let proportion_of_total_reward = proportion * total_reward;
+    
+    if (building == "JAR")
+        return proportion_of_total_reward / jar_count;
+    else if (building == "NET")
+        return proportion_of_total_reward / net_count;
+    else if (building == "HATCHERY")
+        return proportion_of_total_reward / hatchery_count;
+    
+    return reward;
+}
+
 
 
 
@@ -476,7 +533,39 @@ function update_brightness() {
     var wrapper = document.getElementById("wrapper");
     var main = document.getElementById("main");
     var temp = document.getElementById("background_gradient");
-
+    
+    
+    if (hasAnglerfish == 1) {
+        
+        // rgba(255, 200, 255, 0.5), rgba(255, 0, 0, 0.5)
+        
+        temp.style.backgroundImage = "-moz-radial-gradient(rgba(255, 100, 255, 1), rgba(255, 0, 0, 0.5))";
+        temp.style.backgroundImage = "-webkit-radial-gradient(rgba(255, 100, 255, 1), rgba(255, 0, 0, 0.5))";
+        temp.style.backgroundImage = "-ms-radial-gradient(rgba(255, 100, 255, 1), rgba(255, 0, 0, 0.5))";
+        temp.style.backgroundImage = "radial-gradient(rgba(255, 100, 255, 1), rgba(255, 0, 0, 0.5))";
+        temp.style.opacity = percent/2;
+        
+        
+        main.style.background = "rgba(0,0,255," + percent/5 + ")";
+        main.style.boxShadow = "0px -10px 50px 50px inset rgba(0, 200, 255," + percent / 3 + ")"; // 250, 200, 0
+        
+    }
+    
+    
+    else if (hasGlowworms == 1) {
+        temp.style.backgroundImage = "-moz-radial-gradient(rgba(100, 200, 0, " + percent/1.3 + "), rgba(0, 0, 255, 0.05))";
+        temp.style.backgroundImage = "-webkit-radial-gradient(rgba(100, 200, 0, " + percent/1.3 + "), rgba(0, 0, 255, 0.05))";
+        temp.style.backgroundImage = "-ms-radial-gradient(rgba(100, 200, 0, " + percent/1.3 + "), rgba(0, 0, 255, 0.05))";
+        temp.style.backgroundImage = "radial-gradient(rgba(100, 200, 0, " + percent/1.3 + "), rgba(0, 0, 255, 0.05))";
+        temp.style.opacity = percent;
+        
+        
+        
+        main.style.background = "rgba(0,150,0," + percent / 5 + ")";
+        main.style.boxShadow = "0px -10px 50px 50px inset rgba(220, 255, 0," + percent / 3 + ")";
+    }
+    
+    
     if (hasGlowworms == 0) {
         temp.style.backgroundImage = "-moz-radial-gradient(rgba(200, 130, 20, " + percent.toString() + "), rgba(0, 0, 0, 0.1))";
         temp.style.backgroundImage = "-webkit-radial-gradient(rgba(200, 100, 0, " + percent.toString() + "), rgba(0, 0, 0, 0.1))";
@@ -490,26 +579,7 @@ function update_brightness() {
         
     }
     
-    if (hasGlowworms == 1) {
-        temp.style.backgroundImage = "-moz-radial-gradient(rgba(100, 200, 0, " + percent/1.3 + "), rgba(0, 0, 0, 0.1))";
-        temp.style.backgroundImage = "-webkit-radial-gradient(rgba(100, 200, 0, " + percent/1.3 + "), rgba(0, 0, 0, 0.1))";
-        temp.style.backgroundImage = "-ms-radial-gradient(rgba(100, 200, 0, " + percent/1.3 + "), rgba(0, 0, 0, 0.1))";
-        temp.style.backgroundImage = "radial-gradient(rgba(100, 200, 0, " + percent/1.3 + "), rgba(0, 0, 0, 0.1))";
-        temp.style.opacity = percent;
-        
-        
-        
-        main.style.background = "rgba(0,150,0," + percent / 5 + ")";
-        main.style.boxShadow = "0px -10px 50px 50px inset rgba(180, 255, 0," + percent / 3 + ")"; // 250, 200, 0
-        
-        /*
-        let temp = document.getElementById("background_gradient");
-        temp.style.backgroundImage = "-moz-radial-gradient(rgba(100, 200, 0, " + percent + "), rgba(0, 0, 0, 0.1))";
-        temp.style.backgroundImage = "-webkit-radial-gradient(rgba(100, 200, 0, " + percent + "), rgba(0, 0, 0, 0.1))";
-        temp.style.backgroundImage = "-ms-radial-gradient(rgba(100, 200, 0, " + percent + "), rgba(0, 0, 0, 0.1))";
-        temp.style.backgroundImage = "radial-gradient(rgba(100, 200, 0, " + percent + "), rgba(0, 0, 0, 0.1))";
-        temp.style.display = "flex";*/
-    }
+    
     
     
     update_font_colors(percent);
@@ -569,8 +639,8 @@ function update_font_colors(percent) {
     
     else if (hasGlowworms == 1) {
         
-        let rgb1 = [255 * percent + 180, 255 * percent + 255, 255 * percent + 0];
-        let rgb2 = [255 * percent + 90, 255 * percent + 125, 255 * percent + 0];
+        let rgb1 = [255 * percent + 200, 255 * percent + 255, 255 * percent + 20];
+        let rgb2 = [255 * percent + 70, 255 * percent + 105, 255 * percent + 0];
         change_firefly_font(rgb1, rgb2);
         
     }
@@ -586,29 +656,82 @@ function update_font_colors(percent) {
     
     
     
-
-    
     // Update all the other fonts now:
     
-    font = document.getElementsByClassName("building");
-    for (let i = 0; i < font.length; i++) {
-        font[i].style.color = "rgb(" + max255(255 * percent + 255) + "," + max255(255 * percent + 160) + "," + max255(255 * percent + 0) + ")";
-    }
+    
+    
+    
+    if (hasAnglerfish == 1) {
+        font = document.getElementsByClassName("building");
+        for (let i = 0; i < font.length; i++) {
+            font[i].style.color = "rgb(" + max255(255 * percent + 255) + "," + max255(255 * percent + 160) + "," + max255(255 * percent + 0) + ")";
+        }
 
-    font = document.getElementsByClassName("counter");
-    for (let i = 0; i < font.length; i++) {
-        font[i].style.color = "rgb(" + max255(255 * percent + 255) + "," + max255(255 * percent + 232) + "," + max255(255 * percent + 56) + ")";
-    }
+        font = document.getElementsByClassName("counter");
+        for (let i = 0; i < font.length; i++) {
+            font[i].style.color = "rgb(" + max255(255 * percent + 255) + "," + max255(255 * percent + 232) + "," + max255(255 * percent + 56) + ")";
+        }
 
-    font = document.getElementsByClassName("price");
-    for (let i = 0; i < font.length; i++) {
-        font[i].style.color = "rgb(" + max255(255 * percent + 255) + "," + max255(255 * percent + 232) + "," + max255(255 * percent + 56) + ")";
-    }
+        font = document.getElementsByClassName("price");
+        for (let i = 0; i < font.length; i++) {
+            font[i].style.color = "rgb(" + max255(255 * percent + 255) + "," + max255(255 * percent + 232) + "," + max255(255 * percent + 56) + ")";
+        }
 
-    font = document.getElementsByClassName("title");
-    for (let i = 0; i < font.length; i++) {
-        font[i].style.color = "rgb(" + max255(255 * percent + 224) + "," + max255(255 * percent + 238) + "," + max255(255 * percent + 199) + ")";
+        font = document.getElementsByClassName("title");
+        for (let i = 0; i < font.length; i++) {
+            font[i].style.color = "rgb(" + max255(255 * percent + 224) + "," + max255(255 * percent + 238) + "," + max255(255 * percent + 199) + ")";
+        }
     }
+    
+    
+    else if (hasGlowworms == 1) {
+        font = document.getElementsByClassName("building");
+        for (let i = 0; i < font.length; i++) {
+            font[i].style.color = "rgb(" + max255(255 * percent + 80) + "," + max255(255 * percent + 185) + "," + max255(255 * percent + 30) + ")";
+        }
+
+        font = document.getElementsByClassName("counter");
+        for (let i = 0; i < font.length; i++) {
+            font[i].style.color = "rgb(" + max255(255 * percent + 175) + "," + max255(255 * percent + 255) + "," + max255(255 * percent + 0) + ")";
+        }
+
+        font = document.getElementsByClassName("price");
+        for (let i = 0; i < font.length; i++) {
+            font[i].style.color = "rgb(" + max255(255 * percent + 175) + "," + max255(255 * percent + 255) + "," + max255(255 * percent + 0) + ")";
+        }
+
+        font = document.getElementsByClassName("title");
+        for (let i = 0; i < font.length; i++) {
+            font[i].style.color = "rgb(" + max255(255 * percent + 225) + "," + max255(255 * percent + 255) + "," + max255(255 * percent + 200) + ")";
+        }
+    }
+    
+    else {
+
+        font = document.getElementsByClassName("building");
+        for (let i = 0; i < font.length; i++) {
+            font[i].style.color = "rgb(" + max255(255 * percent + 255) + "," + max255(255 * percent + 160) + "," + max255(255 * percent + 0) + ")";
+        }
+
+        font = document.getElementsByClassName("counter");
+        for (let i = 0; i < font.length; i++) {
+            font[i].style.color = "rgb(" + max255(255 * percent + 255) + "," + max255(255 * percent + 232) + "," + max255(255 * percent + 56) + ")";
+        }
+
+        font = document.getElementsByClassName("price");
+        for (let i = 0; i < font.length; i++) {
+            font[i].style.color = "rgb(" + max255(255 * percent + 255) + "," + max255(255 * percent + 232) + "," + max255(255 * percent + 56) + ")";
+        }
+
+        font = document.getElementsByClassName("title");
+        for (let i = 0; i < font.length; i++) {
+            font[i].style.color = "rgb(" + max255(255 * percent + 224) + "," + max255(255 * percent + 238) + "," + max255(255 * percent + 199) + ")";
+        }
+    }
+    
+    
+    
+    
 }
 
 
@@ -677,20 +800,7 @@ function timer() {
     // Take fireflies per second (Fps) and divide by 4
     // so Jars give 1 Fps. So here put 0.25 * jar_count.
     
-    
-    let new_flies = 0.25 * jar_count
-                    + 2.5 * net_count
-                    + 25 * hatchery_count;
-    
-    
-    if(hasAnglerfish == 1 && hasGlowworms == 1)
-        firefly_count = firefly_count + Math.pow(new_flies, 1.2);
-    
-    else if(hasGlowworms == 1 || hasAnglerfish == 1) 
-        firefly_count = firefly_count + Math.pow(new_flies, 1.1);
-    
-    else
-        firefly_count = firefly_count + new_flies;
+    firefly_count = firefly_count + calculate_reward(0.25);
     
     
     update();
@@ -704,54 +814,24 @@ function set_tooltip(tip) {
     //temp.innerHTML = "" + tip;
     
     if(tip == "JAR") {
-        if(hasAnglerfish == 1 && hasGlowworms == 1)
-            temp.innerHTML = "Jars catch 4 per second";
-        else if(hasGlowworms == 1 || hasAnglerfish == 1)
-            temp.innerHTML = "Jars catch 2 per second";
-        else 
-            temp.innerHTML = "Jars catch 1 per second";
+        temp.innerHTML = "Jars catch " + format_value(calculate_building_reward("JAR")) + " per second";
     }
     else if (tip == "NET") {
-        if(hasAnglerfish == 1 && hasGlowworms == 1)
-            temp.innerHTML = "Nets catch 40 per second";
-        else if(hasGlowworms == 1 || hasAnglerfish == 1)
-            temp.innerHTML = "Nets catch 20 per second";
-        else 
-            temp.innerHTML = "Nets catch 10 per second";
+        temp.innerHTML = "Nets catch " + format_value(calculate_building_reward("NET")) + " per second";
         
     }
     else if (tip == "HATCHERY") {
-        if(hasAnglerfish == 1 && hasGlowworms == 1)
-            temp.innerHTML = "Hatcheries incubate 400 per second";
-        else if(hasGlowworms == 1 || hasAnglerfish == 1)
-            temp.innerHTML = "Hatcheries incubate 200 per second";
-        else 
-            temp.innerHTML = "Hatcheries incubate 100 per second";
+        temp.innerHTML = "Hatcheries incubate " + format_value(calculate_building_reward("HATCHERY")) + " per second";
         
     }
     else if (tip == "JAR_FPS") {
-        if(hasAnglerfish == 1 && hasGlowworms == 1)
-            temp.innerHTML = "Jars are catching " + format_value(jar_count * 4) +  " per second";
-        else if(hasGlowworms == 1 || hasAnglerfish == 1)
-            temp.innerHTML = "Jars are catching " + format_value(jar_count * 2) +  " per second";
-        else 
-            temp.innerHTML = "Jars are catching " + format_value(jar_count * 1) +  " per second";
+        temp.innerHTML = "Jars are catching " + format_value(calculate_building_reward("JAR")*jar_count) + " per second";
     }
     else if (tip == "NET_FPS") {
-        if(hasAnglerfish == 1 && hasGlowworms == 1)
-            temp.innerHTML = "Nets are catching " + format_value(net_count * 40) +  " per second";
-        else if(hasGlowworms == 1 || hasAnglerfish == 1)
-            temp.innerHTML = "Nets are catching " + format_value(net_count * 20) +  " per second";
-        else 
-            temp.innerHTML = "Nets are catching " + format_value(net_count * 10) +  " per second"; 
+        temp.innerHTML = "Nets are catching " + format_value(calculate_building_reward("NET")*net_count) + " per second";
     }
     else if (tip == "HATCHERY_FPS") {
-        if(hasAnglerfish == 1 && hasGlowworms == 1)
-            temp.innerHTML = "Hatcheries are incubating " + format_value(hatchery_count * 400) +  " per second";
-        else if(hasGlowworms == 1 || hasAnglerfish == 1)
-            temp.innerHTML = "Hatcheries are incubating " + format_value(hatchery_count * 200) +  " per second";
-        else 
-            temp.innerHTML = "Hatcheries are incubating " + format_value(hatchery_count * 100) +  " per second"; 
+        temp.innerHTML = "Hatcheries are incubating " + format_value(calculate_building_reward("HATCHERY")*hatchery_count) + " per second"; 
     }
     
     else if (tip == "GLOWWORMS") {
@@ -761,6 +841,11 @@ function set_tooltip(tip) {
     
     else if (tip == "ANGLERFISH") {
         temp.innerHTML = "2x catch rate, but...";
+        
+    }
+    
+    else if (tip == "TOTAL_FPS") {
+        temp.innerHTML = "Buildings give " + format_value(calculate_reward(1)) + " per second";
         
     }
     
