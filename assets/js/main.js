@@ -903,12 +903,12 @@ function set_tooltip(tip) {
         temp.innerHTML = "&nbsp;";
     }
     
-    else if (tip == "COUNT") {
+    else if (tip == "BUILDING") {
         temp.innerHTML = "You have " + (jar_count + net_count + hatchery_count) + " buildings";
         
     }
     
-    else if (tip == "BUILDING") {
+    else if (tip == "COUNT") {
         temp.innerHTML = "Total production is  " + format_value(calculate_reward(1)) + " per second";
         
     }
