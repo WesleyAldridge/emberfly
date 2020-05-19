@@ -11,9 +11,10 @@ Languages used (so far): JavaScript, CSS, HTML
 - Add upgrades
 - Add graphics for buildings/upgrades
 
-## Dynamic Lighting System:
+## Dynamic Lighting/Progression System:
 
 - Lighting changes dynamically as you play, getting brighter as you accumulate fireflies and dimmer as you spend them.
+- Upgrades for Glow Worms and Angler Fish
   
 <img src="/screenshots/no_flies.jpg" align="left" width="80%"  >
 
@@ -23,3 +24,6 @@ Languages used (so far): JavaScript, CSS, HTML
   
 <img src="/screenshots/max_flies.jpg" align="left" width="80%" >
 
+<img src="/screenshots/glow_worms.jpg" align="left" width="80%" >
+
+<img src="/screenshots/angler_fish.jpg" align="left" width="80%" >
