@@ -1,6 +1,6 @@
-# [emberfly.com](http://www.emberfly.com)
+# [Play Emberfly Here](https://wesleyaldridge.github.io/emberfly/)
 
-WIP of an idle game I am making inspired by Cookie Clicker.
+WIP of an idle game I am making inspired by Cookie Clicker and other games of the genre.
 
 Languages used (so far): JavaScript, CSS, HTML
 
