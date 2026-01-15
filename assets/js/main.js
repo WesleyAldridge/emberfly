@@ -99,7 +99,7 @@ var hasAnglerfish = 0;
 
 // Upgrade tracking
 var upgrades = {
-    clickPower1: false,      // 2x click
+    clickPower1: false,      // 2x click - costs 250
     clickPower2: false,      // 5x click
     clickPower3: false,      // 10x click
     jarBoost: false,         // Luciferin Infusion - 2x jar production
@@ -134,7 +134,7 @@ var revealed = {
     // Upgrades
     glowworms: false,
     anglerfish: false,
-    clickPower1: true,  // First upgrade always visible
+    clickPower1: false,
     clickPower2: false,
     clickPower3: false,
     jarBoost: false,
@@ -354,6 +354,7 @@ function check_revelations() {
     if (!revealed.glowworms && firefly_count >= BASE_GLOWWORMS_PRICE / 10) revealed.glowworms = true;
     if (!revealed.anglerfish && firefly_count >= BASE_ANGLERFISH_PRICE / 10 && hasGlowworms == 1) revealed.anglerfish = true;
     
+    if (!revealed.clickPower1 && firefly_count >= 25) revealed.clickPower1 = true;
     if (!revealed.clickPower2 && firefly_count >= 5000 && upgrades.clickPower1) revealed.clickPower2 = true;
     if (!revealed.clickPower3 && firefly_count >= 100000 && upgrades.clickPower2) revealed.clickPower3 = true;
     
@@ -425,6 +426,7 @@ function update_upgrades() {
             temp.style.display = "inline-block";
             container.style.display = "block";
         }
+        temp.style.pointerEvents = "auto";
         
         let temp2 = document.getElementsByName("anglerfish")[0];
         temp2.style.opacity = 0.5;
@@ -455,6 +457,7 @@ function update_upgrades() {
             temp.style.display = "inline-block";
             container.style.display = "block";
         }
+        temp.style.pointerEvents = "auto";
     } else if (hasAnglerfish == 0) {
         let temp = document.getElementsByName("anglerfish")[0];
         temp.style.display = "none";
@@ -468,7 +471,7 @@ function update_upgrades() {
     }
     
     // Click power upgrades
-    update_upgrade_button("clickPower1", 1000, !upgrades.clickPower1);
+    update_upgrade_button("clickPower1", 250, !upgrades.clickPower1);
     update_upgrade_button("clickPower2", 50000, !upgrades.clickPower2 && upgrades.clickPower1);
     update_upgrade_button("clickPower3", 1000000, !upgrades.clickPower3 && upgrades.clickPower2);
     
@@ -498,10 +501,6 @@ function check_upgrades_section_visibility() {
     
     // Check if ANY upgrade should be visible (revealed AND unlockable)
     let hasVisibleUpgrade = false;
-    
-    // Check visual upgrades
-    if (revealed.glowworms && firefly_count >= BASE_GLOWWORMS_PRICE && hasGlowworms == 0) hasVisibleUpgrade = true;
-    if (revealed.anglerfish && firefly_count >= BASE_ANGLERFISH_PRICE && hasAnglerfish == 0 && hasGlowworms == 1) hasVisibleUpgrade = true;
     
     // Check if ANY revealed upgrade is available
     if (revealed.glowworms && hasGlowworms == 0) hasVisibleUpgrade = true;
@@ -538,6 +537,8 @@ function update_upgrade_button(name, price, shouldShow) {
         if (container) container.style.display = "block";
         btn.disabled = firefly_count < price;
         btn.style.opacity = firefly_count < price ? 0.5 : 1;
+        // Enable pointer events even when disabled so tooltips work
+        btn.style.pointerEvents = "auto";
     } else {
         btn.style.display = "none";
         let container = btn.parentElement;
@@ -815,7 +816,7 @@ function reset() {
             festival: false,
             glowworms: false,
             anglerfish: false,
-            clickPower1: true,
+            clickPower1: false,
             clickPower2: false,
             clickPower3: false,
             jarBoost: false,
