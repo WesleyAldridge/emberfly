@@ -761,7 +761,89 @@ function update_font_colors(percent) {
 function reset() {
     var answer = confirm("Are you sure you want to reset? Your progress will be deleted.");
     if (answer == true) {
+        // Clear all localStorage
         localStorage.clear();
+        
+        // Reset all game variables to base values
+        firefly_count = BASE_FIREFLY_COUNT;
+        click_power = 1;
+        max_flies = 100000;
+        
+        jar_count = BASE_JAR_COUNT;
+        jar_price = BASE_JAR_PRICE;
+        net_count = BASE_NET_COUNT;
+        net_price = BASE_NET_PRICE;
+        hatchery_count = BASE_HATCHERY_COUNT;
+        hatchery_price = BASE_HATCHERY_PRICE;
+        meadow_count = BASE_MEADOW_COUNT;
+        meadow_price = BASE_MEADOW_PRICE;
+        lighthouse_count = BASE_LIGHTHOUSE_COUNT;
+        lighthouse_price = BASE_LIGHTHOUSE_PRICE;
+        garden_count = BASE_GARDEN_COUNT;
+        garden_price = BASE_GARDEN_PRICE;
+        sanctuary_count = BASE_SANCTUARY_COUNT;
+        sanctuary_price = BASE_SANCTUARY_PRICE;
+        lab_count = BASE_LAB_COUNT;
+        lab_price = BASE_LAB_PRICE;
+        forest_count = BASE_FOREST_COUNT;
+        forest_price = BASE_FOREST_PRICE;
+        pool_count = BASE_POOL_COUNT;
+        pool_price = BASE_POOL_PRICE;
+        festival_count = BASE_FESTIVAL_COUNT;
+        festival_price = BASE_FESTIVAL_PRICE;
+        
+        hasGlowworms = 0;
+        hasAnglerfish = 0;
+        
+        // Reset all upgrades
+        for (let key in upgrades) {
+            upgrades[key] = false;
+        }
+        
+        // Reset revealed state
+        revealed = {
+            jar: true,
+            net: false,
+            hatchery: false,
+            meadow: false,
+            lighthouse: false,
+            garden: false,
+            sanctuary: false,
+            lab: false,
+            forest: false,
+            pool: false,
+            festival: false,
+            glowworms: false,
+            anglerfish: false,
+            clickPower1: true,
+            clickPower2: false,
+            clickPower3: false,
+            jarBoost: false,
+            netBoost: false,
+            hatcheryBoost: false,
+            meadowBoost: false,
+            lighthouseBoost: false,
+            gardenBoost: false,
+            sanctuaryBoost: false,
+            labBoost: false,
+            forestBoost: false,
+            poolBoost: false,
+            festivalBoost: false,
+            autoClicker: false
+        };
+        
+        // Clear auto-clicker interval if it exists
+        if (autoClickerInterval) {
+            clearInterval(autoClickerInterval);
+            autoClickerInterval = null;
+        }
+        
+        // Reset image and text
+        set_click_image("emberfly");
+        document.getElementById("fireflies_text").innerHTML = "Fireflies";
+        document.getElementById("tooltip").innerHTML = "The world is dark";
+        
+        // Reload page to ensure clean state
         location.reload();
     }
 }
