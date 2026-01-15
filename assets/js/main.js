@@ -116,6 +116,8 @@ var upgrades = {
     autoClicker: false       // Auto-click once per second
 };
 
+var autoClickerInterval = null;
+
 function calculate_reward(seconds) {
     let base_production = BASE_JAR_REWARD * jar_count * (upgrades.jarBoost ? 2 : 1)
                         + BASE_NET_REWARD * net_count * (upgrades.netBoost ? 2 : 1)
@@ -281,6 +283,11 @@ function load() {
         try {
             var loadedUpgrades = JSON.parse(upgradesStr);
             Object.assign(upgrades, loadedUpgrades);
+            
+            // Restart auto-clicker if it was previously purchased
+            if (upgrades.autoClicker && !autoClickerInterval) {
+                autoClickerInterval = setInterval(() => add(), 1000);
+            }
         } catch(e) {}
     }
     
@@ -531,8 +538,8 @@ function buy_upgrade(upgrade_name, price) {
         if (upgrade_name == "clickPower1") click_power = 2;
         if (upgrade_name == "clickPower2") click_power = 5;
         if (upgrade_name == "clickPower3") click_power = 10;
-        if (upgrade_name == "autoClicker") {
-            setInterval(() => add(), 1000);
+        if (upgrade_name == "autoClicker" && !autoClickerInterval) {
+            autoClickerInterval = setInterval(() => add(), 1000);
         }
         
         update();
@@ -671,4 +678,54 @@ function set_tooltip(tip) {
     var temp = document.getElementById("tooltip");
     var tooltips = {
         "JAR": "Jars catch " + format_value(BASE_JAR_REWARD * (upgrades.jarBoost ? 2 : 1)) + " per second",
-        "NET": "Nets catch " + format_value(BASE_NET_REWARD * (upgrades.netBoost ? 2 : 1)) + "
+        "NET": "Nets catch " + format_value(BASE_NET_REWARD * (upgrades.netBoost ? 2 : 1)) + " per second",
+        "HATCHERY": "Hatcheries incubate " + format_value(BASE_HATCHERY_REWARD * (upgrades.hatcheryBoost ? 2 : 1)) + " per second",
+        "MEADOW": "Meadows attract " + format_value(BASE_MEADOW_REWARD * (upgrades.meadowBoost ? 2 : 1)) + " per second",
+        "LIGHTHOUSE": "Lighthouses attract " + format_value(BASE_LIGHTHOUSE_REWARD * (upgrades.lighthouseBoost ? 2 : 1)) + " per second",
+        "GARDEN": "Gardens cultivate " + format_value(BASE_GARDEN_REWARD * (upgrades.gardenBoost ? 2 : 1)) + " per second",
+        "SANCTUARY": "Sanctuaries protect " + format_value(BASE_SANCTUARY_REWARD * (upgrades.sanctuaryBoost ? 2 : 1)) + " per second",
+        "LAB": "Labs research " + format_value(BASE_LAB_REWARD * (upgrades.labBoost ? 2 : 1)) + " per second",
+        "FOREST": "Forests multiply " + format_value(BASE_FOREST_REWARD * (upgrades.forestBoost ? 2 : 1)) + " per second",
+        "POOL": "Pools glow with " + format_value(BASE_POOL_REWARD * (upgrades.poolBoost ? 2 : 1)) + " per second",
+        "FESTIVAL": "Festivals swarm " + format_value(BASE_FESTIVAL_REWARD * (upgrades.festivalBoost ? 2 : 1)) + " per second",
+        "GLOWWORMS": "Worms.. that glow - multiplies all production",
+        "ANGLERFISH": "Deep sea light - further multiplies all production",
+        "CLICK1": "Catch 2 fireflies with each click",
+        "CLICK2": "Catch 5 fireflies with each click",
+        "CLICK3": "Catch 10 fireflies with each click",
+        "LUCIFERIN": "The light-producing molecule in fireflies - doubles jar production",
+        "GOSSAMER": "Delicate shimmering threads - doubles net production",
+        "NOCTILUCA": "Night lights - bioluminescent organisms - doubles hatchery production",
+        "CREPUSCULAR": "Twilight hours when fireflies are most active - doubles meadow production",
+        "PHAROS": "Named for the legendary Lighthouse of Alexandria - doubles lighthouse production",
+        "FOXFIRE": "The eerie bioluminescent glow of fungi on rotting wood - doubles garden production",
+        "LUCIFERASE": "The enzyme that catalyzes the light-producing reaction - doubles sanctuary production",
+        "PHOTOPHORE": "Specialized light-producing organs in bioluminescent creatures - doubles lab production",
+        "SYLVAN": "The darkest shadows of mystical forests where light creatures gather - doubles forest production",
+        "BIOLUME": "Ancient water reservoirs teeming with glowing organisms - doubles pool production",
+        "CELESTIAL": "Where earth's light meets the stars - a convergence of bioluminescent forces - doubles festival production",
+        "AUTOCLICKER": "Automatically catches 1 firefly per second",
+        "TOTAL_FPS": "Buildings produce " + format_value(calculate_reward(1)) + " per second",
+        "BLANK": "&nbsp;",
+        "BUILDING": "You have " + (jar_count + net_count + hatchery_count + meadow_count + lighthouse_count + garden_count + sanctuary_count + lab_count + forest_count + pool_count + festival_count) + " buildings",
+        "COUNT": "Total production is " + format_value(calculate_reward(1)) + " per second",
+        "PRICE": " ",
+        "CLICKING": "You catch " + format_value(click_power) + " per click"
+    };
+    
+    temp.innerHTML = tooltips[tip] || "&nbsp;";
+}
+
+function set_click_image(img) {
+    let images = ["emberfly", "glowworm", "anglerfish"];
+    images.forEach(elem => {
+        let temp = document.getElementById(elem);
+        if (temp) {
+            temp.style.display = img == elem ? "inline-block" : "none";
+        }
+    });
+}
+
+if ('addEventListener' in window) {
+    window.addEventListener('load', load);
+}
