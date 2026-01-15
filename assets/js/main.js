@@ -382,6 +382,44 @@ function update_upgrades() {
     
     // Auto-clicker
     update_upgrade_button("autoClicker", 100000, !upgrades.autoClicker);
+    
+    // Show/hide the entire upgrades section
+    check_upgrades_section_visibility();
+}
+
+function check_upgrades_section_visibility() {
+    let section = document.getElementById("upgrades_section");
+    if (!section) return;
+    
+    // Check if ANY upgrade should be visible
+    let hasVisibleUpgrade = false;
+    
+    // Check visual upgrades
+    if (firefly_count >= BASE_GLOWWORMS_PRICE && hasGlowworms == 0) hasVisibleUpgrade = true;
+    if (firefly_count >= BASE_ANGLERFISH_PRICE && hasAnglerfish == 0 && hasGlowworms == 1) hasVisibleUpgrade = true;
+    
+    // Check click upgrades
+    if (!upgrades.clickPower1) hasVisibleUpgrade = true;
+    if (!upgrades.clickPower2 && upgrades.clickPower1) hasVisibleUpgrade = true;
+    if (!upgrades.clickPower3 && upgrades.clickPower2) hasVisibleUpgrade = true;
+    
+    // Check building upgrades
+    if (!upgrades.jarBoost && jar_count >= 10) hasVisibleUpgrade = true;
+    if (!upgrades.netBoost && net_count >= 10) hasVisibleUpgrade = true;
+    if (!upgrades.hatcheryBoost && hatchery_count >= 10) hasVisibleUpgrade = true;
+    if (!upgrades.meadowBoost && meadow_count >= 10) hasVisibleUpgrade = true;
+    if (!upgrades.lighthouseBoost && lighthouse_count >= 10) hasVisibleUpgrade = true;
+    if (!upgrades.gardenBoost && garden_count >= 10) hasVisibleUpgrade = true;
+    if (!upgrades.sanctuaryBoost && sanctuary_count >= 10) hasVisibleUpgrade = true;
+    if (!upgrades.labBoost && lab_count >= 10) hasVisibleUpgrade = true;
+    if (!upgrades.forestBoost && forest_count >= 10) hasVisibleUpgrade = true;
+    if (!upgrades.poolBoost && pool_count >= 10) hasVisibleUpgrade = true;
+    if (!upgrades.festivalBoost && festival_count >= 10) hasVisibleUpgrade = true;
+    
+    // Check auto-clicker
+    if (!upgrades.autoClicker) hasVisibleUpgrade = true;
+    
+    section.style.display = hasVisibleUpgrade ? "block" : "none";
 }
 
 function update_upgrade_button(name, price, shouldShow) {
