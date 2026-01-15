@@ -18,11 +18,9 @@
     <link rel="preload" href="images/anglerfish_glow.png" as="image">
 </head>
 
-
 <body>
 
-    <div id="background_gradient">
-    </div>
+    <div id="background_gradient"></div>
 
     <!-- Wrapper -->
     <div id="wrapper">
@@ -32,13 +30,14 @@
             <header>
 
                 <a href="#" onclick="add()" draggable="false" id="emberfly_link">
-                    <div class="disable-dbl-tap-zoom" id="emberfly"
-                    draggable="false" 
+                    <div class="disable-dbl-tap-zoom" id="emberfly" draggable="false" 
                     onmouseover="set_tooltip('CLICKING')" onmouseout="set_tooltip('BLANK')"></div>
                     
-                    <div class="disable-dbl-tap-zoom" id="glowworm" onmouseover="set_tooltip('CLICKING')" onmouseout="set_tooltip('BLANK')"></div>
+                    <div class="disable-dbl-tap-zoom" id="glowworm" 
+                    onmouseover="set_tooltip('CLICKING')" onmouseout="set_tooltip('BLANK')"></div>
                     
-                    <div class="disable-dbl-tap-zoom" id="anglerfish" onmouseover="set_tooltip('CLICKING')" onmouseout="set_tooltip('BLANK')"></div>
+                    <div class="disable-dbl-tap-zoom" id="anglerfish" 
+                    onmouseover="set_tooltip('CLICKING')" onmouseout="set_tooltip('BLANK')"></div>
                 </a>
 
                 <table>
@@ -52,39 +51,121 @@
                     </tr>
                 </table>
 
-
-
-
-
-
-
-                <!-- <button name="save" onclick="save()">
-                        Save
+                <!-- UPGRADES SECTION -->
+                <div style="margin: 20px 0;">
+                    
+                    <!-- Visual Upgrades -->
+                    <button class="upgrade disable-dbl-tap-zoom" name="glowworms" disabled 
+                        onclick="buy(GLOWWORMS)" onmouseover="set_tooltip('GLOWWORMS')" 
+                        onmouseout="set_tooltip('BLANK')">
+                        Glow Worms (200K)
                     </button>
 
-                    <button name="load" onclick="load()">
-                        load
-                    </button> -->
+                    <button class="upgrade disable-dbl-tap-zoom" name="anglerfish" disabled 
+                        onclick="buy(ANGLERFISH)" onmouseover="set_tooltip('ANGLERFISH')" 
+                        onmouseout="set_tooltip('BLANK')">
+                        Angler Fish (10M)
+                    </button>
+                    <br><br>
 
+                    <!-- Click Power Upgrades -->
+                    <button class="upgrade disable-dbl-tap-zoom" name="clickPower1" 
+                        onclick="buy_upgrade('clickPower1', 1000)" 
+                        onmouseover="set_tooltip('BLANK')" onmouseout="set_tooltip('BLANK')">
+                        Better Catching (1K) - 2x click
+                    </button>
 
+                    <button class="upgrade disable-dbl-tap-zoom" name="clickPower2" 
+                        onclick="buy_upgrade('clickPower2', 50000)"
+                        onmouseover="set_tooltip('BLANK')" onmouseout="set_tooltip('BLANK')">
+                        Expert Catching (50K) - 5x click
+                    </button>
 
-                <!-- UPGRADES -->
+                    <button class="upgrade disable-dbl-tap-zoom" name="clickPower3" 
+                        onclick="buy_upgrade('clickPower3', 1000000)"
+                        onmouseover="set_tooltip('BLANK')" onmouseout="set_tooltip('BLANK')">
+                        Master Catching (1M) - 10x click
+                    </button>
+                    <br><br>
 
+                    <!-- Building Upgrades with Cool Scientific Names -->
+                    <button class="upgrade disable-dbl-tap-zoom" name="jarBoost" 
+                        onclick="buy_upgrade('jarBoost', 10000)"
+                        onmouseover="set_tooltip('LUCIFERIN')" onmouseout="set_tooltip('BLANK')">
+                        Luciferin Infusion (10K)
+                    </button>
 
-                <button class="upgrade disable-dbl-tap-zoom" name="glowworms" disabled onclick="buy(GLOWWORMS)" onmouseover="set_tooltip('GLOWWORMS')" onmouseout="set_tooltip('BLANK')">
-                    Glow Worms
-                </button>
+                    <button class="upgrade disable-dbl-tap-zoom" name="netBoost" 
+                        onclick="buy_upgrade('netBoost', 500000)"
+                        onmouseover="set_tooltip('GOSSAMER')" onmouseout="set_tooltip('BLANK')">
+                        Gossamer Weave (500K)
+                    </button>
 
-                <button class="upgrade disable-dbl-tap-zoom" name="anglerfish" disabled onclick="buy(ANGLERFISH)" onmouseover="set_tooltip('ANGLERFISH')" onmouseout="set_tooltip('BLANK')">
-                    Angler Fish
-                </button>
-                <br>
-                <br>
+                    <button class="upgrade disable-dbl-tap-zoom" name="hatcheryBoost" 
+                        onclick="buy_upgrade('hatcheryBoost', 10000000)"
+                        onmouseover="set_tooltip('NOCTILUCA')" onmouseout="set_tooltip('BLANK')">
+                        Noctiluca Catalyst (10M)
+                    </button>
 
+                    <button class="upgrade disable-dbl-tap-zoom" name="meadowBoost" 
+                        onclick="buy_upgrade('meadowBoost', 100000000)"
+                        onmouseover="set_tooltip('CREPUSCULAR')" onmouseout="set_tooltip('BLANK')">
+                        Crepuscular Timing (100M)
+                    </button>
+
+                    <button class="upgrade disable-dbl-tap-zoom" name="lighthouseBoost" 
+                        onclick="buy_upgrade('lighthouseBoost', 2000000000)"
+                        onmouseover="set_tooltip('PHAROS')" onmouseout="set_tooltip('BLANK')">
+                        Pharos Lens (2B)
+                    </button>
+
+                    <button class="upgrade disable-dbl-tap-zoom" name="gardenBoost" 
+                        onclick="buy_upgrade('gardenBoost', 50000000000)"
+                        onmouseover="set_tooltip('FOXFIRE')" onmouseout="set_tooltip('BLANK')">
+                        Foxfire Cultivation (50B)
+                    </button>
+
+                    <button class="upgrade disable-dbl-tap-zoom" name="sanctuaryBoost" 
+                        onclick="buy_upgrade('sanctuaryBoost', 1000000000000)"
+                        onmouseover="set_tooltip('LUCIFERASE')" onmouseout="set_tooltip('BLANK')">
+                        Luciferase Formula (1T)
+                    </button>
+
+                    <button class="upgrade disable-dbl-tap-zoom" name="labBoost" 
+                        onclick="buy_upgrade('labBoost', 20000000000000)"
+                        onmouseover="set_tooltip('PHOTOPHORE')" onmouseout="set_tooltip('BLANK')">
+                        Photophore Enhancement (20T)
+                    </button>
+
+                    <button class="upgrade disable-dbl-tap-zoom" name="forestBoost" 
+                        onclick="buy_upgrade('forestBoost', 500000000000000)"
+                        onmouseover="set_tooltip('SYLVAN')" onmouseout="set_tooltip('BLANK')">
+                        Sylvan Umbra (500T)
+                    </button>
+
+                    <button class="upgrade disable-dbl-tap-zoom" name="poolBoost" 
+                        onclick="buy_upgrade('poolBoost', 10000000000000000)"
+                        onmouseover="set_tooltip('BIOLUME')" onmouseout="set_tooltip('BLANK')">
+                        Biolume Resonance (10Qa)
+                    </button>
+
+                    <button class="upgrade disable-dbl-tap-zoom" name="festivalBoost" 
+                        onclick="buy_upgrade('festivalBoost', 200000000000000000)"
+                        onmouseover="set_tooltip('CELESTIAL')" onmouseout="set_tooltip('BLANK')">
+                        Celestial Convergence (200Qa)
+                    </button>
+                    <br><br>
+
+                    <!-- Special Upgrades -->
+                    <button class="upgrade disable-dbl-tap-zoom" name="autoClicker" 
+                        onclick="buy_upgrade('autoClicker', 100000)"
+                        onmouseover="set_tooltip('BLANK')" onmouseout="set_tooltip('BLANK')">
+                        Auto-Catcher (100K)
+                    </button>
+
+                </div>
 
                 <!-- BUILDINGS -->
-
-
                 <table id="lower_table">
                     
                     <!-- LABELS -->
@@ -100,71 +181,179 @@
                         </td>
                     </tr>
                     
-                    
-                    <!-- JARS -->
+                    <!-- JAR -->
                     <tr>
                         <td>
-                            <div onmouseover="set_tooltip('JAR_FPS')" onmouseout="set_tooltip('BLANK')">
-                                <input class="counter" id="jar_counter" disabled value="0">
-                            </div>
+                            <input class="counter" id="jar_counter" disabled value="0">
                         </td>
                         <td>
-                            <div onmouseover="set_tooltip('JAR')" onmouseout="set_tooltip('BLANK')">
-                                <button class="building" name="Jar" onclick="buy(JAR)" >
-                                    Jar
-                                </button>
-                            </div>
+                            <button class="building" name="Jar" onclick="buy(JAR)" 
+                                onmouseover="set_tooltip('JAR')" onmouseout="set_tooltip('BLANK')">
+                                Jar
+                            </button>
                         </td>
                         <td>
-                            <div onmouseover="set_tooltip('JAR')" onmouseout="set_tooltip('BLANK')">
-                            <input class="price" id="jar_price" disabled value="10">
-                            </div>
+                            <input class="price" id="jar_price" disabled value="20">
                         </td>
                     </tr>
 
-                    
-                    
-                    <!-- NETS -->
+                    <!-- NET -->
                     <tr>
                         <td>
-                            <div onmouseover="set_tooltip('NET_FPS')" onmouseout="set_tooltip('BLANK')">
-                                <input class="counter" id="net_counter" disabled value="0">
-                            </div>
+                            <input class="counter" id="net_counter" disabled value="0">
                         </td>
                         <td>
-                            <div onmouseover="set_tooltip('NET')" onmouseout="set_tooltip('BLANK')">
-                                <button class="building" name="Net" onclick="buy(NET)" >
-                                    Net
-                                </button>
-                            </div>
+                            <button class="building" name="Net" onclick="buy(NET)"
+                                onmouseover="set_tooltip('NET')" onmouseout="set_tooltip('BLANK')">
+                                Net
+                            </button>
                         </td>
                         <td>
-                            <div onmouseover="set_tooltip('NET')" onmouseout="set_tooltip('BLANK')">
-                            <input class="price" id="net_price" disabled value="2000">
-                            </div>
+                            <input class="price" id="net_price" disabled value="1000">
                         </td>
                     </tr>
                     
-                    
-                    
-                    <!-- HATCHERIES -->
+                    <!-- HATCHERY -->
                     <tr>
                         <td>
-                            <div onmouseover="set_tooltip('HATCHERY_FPS')" onmouseout="set_tooltip('BLANK')">
-                                <input class="counter" id="hatchery_counter" disabled value="0">
-                            </div>
+                            <input class="counter" id="hatchery_counter" disabled value="0">
                         </td>
                         <td>
-                            <div onmouseover="set_tooltip('HATCHERY')" onmouseout="set_tooltip('BLANK')">
-                                <button class="building" name="Hatchery" onclick="buy(HATCHERY)">
+                            <button class="building" name="Hatchery" onclick="buy(HATCHERY)"
+                                onmouseover="set_tooltip('HATCHERY')" onmouseout="set_tooltip('BLANK')">
                                 Hatchery
-                                </button>
-                            </div>
+                            </button>
                         </td>
                         <td>
-                            <div onmouseover="set_tooltip('HATCHERY')" onmouseout="set_tooltip('BLANK')">
                             <input class="price" id="hatchery_price" disabled value="25000">
-                            </div>
+                        </td>
+                    </tr>
+
+                    <!-- MEADOW -->
+                    <tr>
+                        <td>
+                            <input class="counter" id="meadow_counter" disabled value="0">
+                        </td>
+                        <td>
+                            <button class="building" name="Meadow" onclick="buy(MEADOW)"
+                                onmouseover="set_tooltip('MEADOW')" onmouseout="set_tooltip('BLANK')">
+                                Meadow
+                            </button>
+                        </td>
+                        <td>
+                            <input class="price" id="meadow_price" disabled value="500000">
+                        </td>
+                    </tr>
+
+                    <!-- LIGHTHOUSE -->
+                    <tr>
+                        <td>
+                            <input class="counter" id="lighthouse_counter" disabled value="0">
+                        </td>
+                        <td>
+                            <button class="building" name="Lighthouse" onclick="buy(LIGHTHOUSE)"
+                                onmouseover="set_tooltip('LIGHTHOUSE')" onmouseout="set_tooltip('BLANK')">
+                                Lighthouse
+                            </button>
+                        </td>
+                        <td>
+                            <input class="price" id="lighthouse_price" disabled value="10000000">
+                        </td>
+                    </tr>
+
+                    <!-- GARDEN -->
+                    <tr>
+                        <td>
+                            <input class="counter" id="garden_counter" disabled value="0">
+                        </td>
+                        <td>
+                            <button class="building" name="Garden" onclick="buy(GARDEN)"
+                                onmouseover="set_tooltip('GARDEN')" onmouseout="set_tooltip('BLANK')">
+                                Bioluminescent Garden
+                            </button>
+                        </td>
+                        <td>
+                            <input class="price" id="garden_price" disabled value="250000000">
+                        </td>
+                    </tr>
+
+                    <!-- SANCTUARY -->
+                    <tr>
+                        <td>
+                            <input class="counter" id="sanctuary_counter" disabled value="0">
+                        </td>
+                        <td>
+                            <button class="building" name="Sanctuary" onclick="buy(SANCTUARY)"
+                                onmouseover="set_tooltip('SANCTUARY')" onmouseout="set_tooltip('BLANK')">
+                                Firefly Sanctuary
+                            </button>
+                        </td>
+                        <td>
+                            <input class="price" id="sanctuary_price" disabled value="5000000000">
+                        </td>
+                    </tr>
+
+                    <!-- LAB -->
+                    <tr>
+                        <td>
+                            <input class="counter" id="lab_counter" disabled value="0">
+                        </td>
+                        <td>
+                            <button class="building" name="Lab" onclick="buy(LAB)"
+                                onmouseover="set_tooltip('LAB')" onmouseout="set_tooltip('BLANK')">
+                                Lightning Bug Lab
+                            </button>
+                        </td>
+                        <td>
+                            <input class="price" id="lab_price" disabled value="100000000000">
+                        </td>
+                    </tr>
+
+                    <!-- FOREST -->
+                    <tr>
+                        <td>
+                            <input class="counter" id="forest_counter" disabled value="0">
+                        </td>
+                        <td>
+                            <button class="building" name="Forest" onclick="buy(FOREST)"
+                                onmouseover="set_tooltip('FOREST')" onmouseout="set_tooltip('BLANK')">
+                                Enchanted Forest
+                            </button>
+                        </td>
+                        <td>
+                            <input class="price" id="forest_price" disabled value="2000000000000">
+                        </td>
+                    </tr>
+
+                    <!-- POOL -->
+                    <tr>
+                        <td>
+                            <input class="counter" id="pool_counter" disabled value="0">
+                        </td>
+                        <td>
+                            <button class="building" name="Pool" onclick="buy(POOL)"
+                                onmouseover="set_tooltip('POOL')" onmouseout="set_tooltip('BLANK')">
+                                Phosphorescent Pool
+                            </button>
+                        </td>
+                        <td>
+                            <input class="price" id="pool_price" disabled value="50000000000000">
+                        </td>
+                    </tr>
+
+                    <!-- FESTIVAL -->
+                    <tr>
+                        <td>
+                            <input class="counter" id="festival_counter" disabled value="0">
+                        </td>
+                        <td>
+                            <button class="building" name="Festival" onclick="buy(FESTIVAL)"
+                                onmouseover="set_tooltip('FESTIVAL')" onmouseout="set_tooltip('BLANK')">
+                                Firefly Festival
+                            </button>
+                        </td>
+                        <td>
+                            <input class="price" id="festival_price" disabled value="1000000000000000">
                         </td>
                     </tr>
                     
@@ -176,26 +365,20 @@
                     reset upgrades
                 </button>
 
-
                 <button name="reset" class="reset" onclick="reset()">
                     reset everything
                 </button>
             </header>
-
 
             <footer>
                 <!-- could put buttons here -->
             </footer>
         </section>
 
-
-
         <!-- TOOLTIP BOX BENEATH MAIN -->
-        <div class="tooltipbar"><span id="tooltip">
-                The world is dark
-            </span></div>
-
-
+        <div class="tooltipbar">
+            <span id="tooltip">The world is dark</span>
+        </div>
 
         <!-- Footer -->
         <footer id="footer">
