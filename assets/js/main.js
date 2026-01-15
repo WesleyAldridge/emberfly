@@ -1,131 +1,148 @@
 /* eslint-env es6 */
 const BASE_FIREFLY_COUNT = 0;
 
+// Building base values
 const BASE_JAR_COUNT = 0;
 const BASE_JAR_PRICE = 20;
+const BASE_JAR_REWARD = 1;
 
 const BASE_NET_COUNT = 0;
 const BASE_NET_PRICE = 1000;
+const BASE_NET_REWARD = 10;
 
 const BASE_HATCHERY_COUNT = 0;
 const BASE_HATCHERY_PRICE = 25000;
+const BASE_HATCHERY_REWARD = 100;
 
-const BASE_GLOWWORMS_PRICE =    200000;   // 100k
+const BASE_MEADOW_COUNT = 0;
+const BASE_MEADOW_PRICE = 500000;
+const BASE_MEADOW_REWARD = 1000;
+
+const BASE_LIGHTHOUSE_COUNT = 0;
+const BASE_LIGHTHOUSE_PRICE = 10000000;
+const BASE_LIGHTHOUSE_REWARD = 10000;
+
+const BASE_GARDEN_COUNT = 0;
+const BASE_GARDEN_PRICE = 250000000;
+const BASE_GARDEN_REWARD = 100000;
+
+const BASE_SANCTUARY_COUNT = 0;
+const BASE_SANCTUARY_PRICE = 5000000000;
+const BASE_SANCTUARY_REWARD = 1000000;
+
+const BASE_LAB_COUNT = 0;
+const BASE_LAB_PRICE = 100000000000;
+const BASE_LAB_REWARD = 10000000;
+
+const BASE_FOREST_COUNT = 0;
+const BASE_FOREST_PRICE = 2000000000000;
+const BASE_FOREST_REWARD = 100000000;
+
+const BASE_POOL_COUNT = 0;
+const BASE_POOL_PRICE = 50000000000000;
+const BASE_POOL_REWARD = 1000000000;
+
+const BASE_FESTIVAL_COUNT = 0;
+const BASE_FESTIVAL_PRICE = 1000000000000000;
+const BASE_FESTIVAL_REWARD = 10000000000;
+
+// Visual upgrades (existing)
+const BASE_GLOWWORMS_PRICE = 200000;
 const BASE_ANGLERFISH_PRICE = 10000000;
 
-
-// These constants will be used for the buy() function
-// to check which item is being bought by comparing
-// the passed-in parameter to these values.
+// Building constants
 const JAR = 1;
 const NET = 2;
 const HATCHERY = 3;
-const GLOWWORMS = 4;
-const ANGLERFISH = 5;
+const MEADOW = 4;
+const LIGHTHOUSE = 5;
+const GARDEN = 6;
+const SANCTUARY = 7;
+const LAB = 8;
+const FOREST = 9;
+const POOL = 10;
+const FESTIVAL = 11;
+const GLOWWORMS = 100;
+const ANGLERFISH = 101;
 
-
-const BASE_JAR_REWARD = 1;
-const BASE_NET_REWARD = 10;
-const BASE_HATCHERY_REWARD = 100;
-
-
-
+// Game state variables
 var firefly_count = BASE_FIREFLY_COUNT;
+var max_flies = 100000;
+var click_power = 1;
 
-// max_flies is the num of flies at which
-// you reach maximum brightness.
-// start at 100k
-// then 10M for glowworms
-// then 1B for anglerfish
-var max_flies = 100000; 
-
+// Building counts and prices
 var jar_count = BASE_JAR_COUNT;
 var jar_price = BASE_JAR_PRICE;
-
 var net_count = BASE_NET_COUNT;
 var net_price = BASE_NET_PRICE;
-
 var hatchery_count = BASE_HATCHERY_COUNT;
 var hatchery_price = BASE_HATCHERY_PRICE;
+var meadow_count = BASE_MEADOW_COUNT;
+var meadow_price = BASE_MEADOW_PRICE;
+var lighthouse_count = BASE_LIGHTHOUSE_COUNT;
+var lighthouse_price = BASE_LIGHTHOUSE_PRICE;
+var garden_count = BASE_GARDEN_COUNT;
+var garden_price = BASE_GARDEN_PRICE;
+var sanctuary_count = BASE_SANCTUARY_COUNT;
+var sanctuary_price = BASE_SANCTUARY_PRICE;
+var lab_count = BASE_LAB_COUNT;
+var lab_price = BASE_LAB_PRICE;
+var forest_count = BASE_FOREST_COUNT;
+var forest_price = BASE_FOREST_PRICE;
+var pool_count = BASE_POOL_COUNT;
+var pool_price = BASE_POOL_PRICE;
+var festival_count = BASE_FESTIVAL_COUNT;
+var festival_price = BASE_FESTIVAL_PRICE;
 
-var hasGlowworms = 0; // use 0 and 1 because true and false is a headache to get to work (i.e., can't get it to work!)
-var hasAnglerfish = 0; // localStorage doesn't save booleans, so just use 0 and 1
+var hasGlowworms = 0;
+var hasAnglerfish = 0;
 
-
-// This will hold the values when each upgrade will appear and be available
-// [0] = glow worms  = 100,000
-// [1] = angler fish = 1,000,000
-var upgrade_starting_values = [BASE_GLOWWORMS_PRICE,
-                               BASE_ANGLERFISH_PRICE];
-var upgrade_names = ["glowworms", "anglerfish"];
-
-
-
-
-
+// Upgrade tracking
+var upgrades = {
+    clickPower1: false,      // 2x click
+    clickPower2: false,      // 5x click
+    clickPower3: false,      // 10x click
+    jarBoost: false,         // Luciferin Infusion - 2x jar production
+    netBoost: false,         // Gossamer Weave - 2x net production
+    hatcheryBoost: false,    // Noctiluca Catalyst - 2x hatchery production
+    meadowBoost: false,      // Crepuscular Timing - 2x meadow production
+    lighthouseBoost: false,  // Pharos Lens - 2x lighthouse production
+    gardenBoost: false,      // Foxfire Cultivation - 2x garden production
+    sanctuaryBoost: false,   // Luciferase Formula - 2x sanctuary production
+    labBoost: false,         // Photophore Enhancement - 2x lab production
+    forestBoost: false,      // Sylvan Umbra - 2x forest production
+    poolBoost: false,        // Biolume Resonance - 2x pool production
+    festivalBoost: false,    // Celestial Convergence - 2x festival production
+    autoClicker: false       // Auto-click once per second
+};
 
 function calculate_reward(seconds) {
-    
-    let new_flies =     1 * jar_count
-                    +  10 * net_count
-                    + 100 * hatchery_count;
+    let base_production = BASE_JAR_REWARD * jar_count * (upgrades.jarBoost ? 2 : 1)
+                        + BASE_NET_REWARD * net_count * (upgrades.netBoost ? 2 : 1)
+                        + BASE_HATCHERY_REWARD * hatchery_count * (upgrades.hatcheryBoost ? 2 : 1)
+                        + BASE_MEADOW_REWARD * meadow_count * (upgrades.meadowBoost ? 2 : 1)
+                        + BASE_LIGHTHOUSE_REWARD * lighthouse_count * (upgrades.lighthouseBoost ? 2 : 1)
+                        + BASE_GARDEN_REWARD * garden_count * (upgrades.gardenBoost ? 2 : 1)
+                        + BASE_SANCTUARY_REWARD * sanctuary_count * (upgrades.sanctuaryBoost ? 2 : 1)
+                        + BASE_LAB_REWARD * lab_count * (upgrades.labBoost ? 2 : 1)
+                        + BASE_FOREST_REWARD * forest_count * (upgrades.forestBoost ? 2 : 1)
+                        + BASE_POOL_REWARD * pool_count * (upgrades.poolBoost ? 2 : 1)
+                        + BASE_FESTIVAL_REWARD * festival_count * (upgrades.festivalBoost ? 2 : 1);
     
     let reward;
     
-    
+    // Apply visual upgrade multipliers
     if(hasAnglerfish == 1 && hasGlowworms == 1)
-        reward = Math.pow(Math.pow(new_flies, 1.2), 1.2) * seconds;
-    
+        reward = Math.pow(Math.pow(base_production, 1.2), 1.2) * seconds;
     else if(hasGlowworms == 1 || hasAnglerfish == 1) 
-        reward = Math.pow(new_flies, 1.2) * seconds;
-    
+        reward = Math.pow(base_production, 1.2) * seconds;
     else
-        reward = new_flies * seconds;
+        reward = base_production * seconds;
     
     return reward;
 }
-
-
-function calculate_building_reward(building) {
-    
-    let reward = 1;
-    let total_reward = calculate_reward(1); // 1 second of game time
-    
-    let building_contribution;
-    let total_contribution;
-    
-    total_contribution =  BASE_JAR_REWARD * jar_count
-                        + BASE_NET_REWARD * net_count
-                        + BASE_HATCHERY_REWARD * hatchery_count;
-    
-    if (building == "JAR")
-        building_contribution = BASE_JAR_REWARD * jar_count;
-    else if (building == "NET")
-        building_contribution = BASE_NET_REWARD * net_count;
-    else if (building == "HATCHERY")
-        building_contribution = BASE_HATCHERY_REWARD * hatchery_count;
-    
-    let proportion = building_contribution / total_contribution;
-    
-    let proportion_of_total_reward = proportion * total_reward;
-    
-    if (building == "JAR")
-        return proportion_of_total_reward / jar_count;
-    else if (building == "NET")
-        return proportion_of_total_reward / net_count;
-    else if (building == "HATCHERY")
-        return proportion_of_total_reward / hatchery_count;
-    
-    return reward;
-}
-
-
-
 
 function format_value(num) {
-    // Input:  number 
-    // output: string
-
     num = Math.floor(num);
 
     if (num >= 1000 && num < 10000) {
@@ -136,816 +153,484 @@ function format_value(num) {
         return numString.substring(0, 2) + "," + numString.substring(2);
     } else if (num >= 100000 && num < 1000000) {
         return String(Math.floor(num / 1000)) + "K";
-    } else if (num >= 1000000) {
+    } else if (num >= 1000000 && num < 1000000000) {
         return String(Math.floor(num / 100000) / 10) + "M";
-    } else if (num >= 1000000000) {
+    } else if (num >= 1000000000 && num < 1000000000000) {
         return String(Math.floor(num / 100000000) / 10) + "B";
+    } else if (num >= 1000000000000) {
+        return String(Math.floor(num / 100000000000) / 10) + "T";
     }
     else {
         return String(num);
     }
 }
 
-
-
-
 function save() {
-
-    if (isNaN(firefly_count) || isNaN(jar_count) || isNaN(jar_price) ||
-        firefly_count == null || jar_count == null || jar_price == null) {
-        // don't save
-    } else {
-        localStorage.setItem("firefly_count", firefly_count);
-        localStorage.setItem("jar_count", jar_count);
-        localStorage.setItem("jar_price", jar_price);
-        
-        localStorage.setItem("net_count", net_count);
-        localStorage.setItem("net_price", net_price);
-
-        localStorage.setItem("hatchery_count", hatchery_count);
-        localStorage.setItem("hatchery_price", hatchery_price);
-        
-        
-        // Save upgrade states
-        localStorage.setItem("hasGlowworms", hasGlowworms);
-        localStorage.setItem("hasAnglerfish", hasAnglerfish);
-    }
+    if (isNaN(firefly_count) || firefly_count == null) return;
+    
+    // Save basic game state
+    localStorage.setItem("firefly_count", firefly_count);
+    localStorage.setItem("click_power", click_power);
+    
+    // Save buildings
+    localStorage.setItem("jar_count", jar_count);
+    localStorage.setItem("jar_price", jar_price);
+    localStorage.setItem("net_count", net_count);
+    localStorage.setItem("net_price", net_price);
+    localStorage.setItem("hatchery_count", hatchery_count);
+    localStorage.setItem("hatchery_price", hatchery_price);
+    localStorage.setItem("meadow_count", meadow_count);
+    localStorage.setItem("meadow_price", meadow_price);
+    localStorage.setItem("lighthouse_count", lighthouse_count);
+    localStorage.setItem("lighthouse_price", lighthouse_price);
+    localStorage.setItem("garden_count", garden_count);
+    localStorage.setItem("garden_price", garden_price);
+    localStorage.setItem("sanctuary_count", sanctuary_count);
+    localStorage.setItem("sanctuary_price", sanctuary_price);
+    localStorage.setItem("lab_count", lab_count);
+    localStorage.setItem("lab_price", lab_price);
+    localStorage.setItem("forest_count", forest_count);
+    localStorage.setItem("forest_price", forest_price);
+    localStorage.setItem("pool_count", pool_count);
+    localStorage.setItem("pool_price", pool_price);
+    localStorage.setItem("festival_count", festival_count);
+    localStorage.setItem("festival_price", festival_price);
+    
+    // Save upgrade states
+    localStorage.setItem("hasGlowworms", hasGlowworms);
+    localStorage.setItem("hasAnglerfish", hasAnglerfish);
+    localStorage.setItem("upgrades", JSON.stringify(upgrades));
 }
-
-
 
 function load() {
+    var temp;
     
-    var temp = parseInt(localStorage.getItem("firefly_count"));
-    if (!isNaN(temp)) {
-        firefly_count = temp;
-    }
-
+    // Load basic state
+    temp = parseInt(localStorage.getItem("firefly_count"));
+    if (!isNaN(temp)) firefly_count = temp;
+    
+    temp = parseInt(localStorage.getItem("click_power"));
+    if (!isNaN(temp)) click_power = temp;
+    
+    // Load buildings
     temp = parseInt(localStorage.getItem("jar_count"));
-    if (!isNaN(temp)) {
-        jar_count = temp;
-    }
-
+    if (!isNaN(temp)) jar_count = temp;
     temp = parseInt(localStorage.getItem("jar_price"));
-    if (!isNaN(temp)) {
-        jar_price = temp;
-    }
-    
+    if (!isNaN(temp)) jar_price = temp;
     
     temp = parseInt(localStorage.getItem("net_count"));
-    if (!isNaN(temp)) {
-        net_count = temp;
-    }
-
+    if (!isNaN(temp)) net_count = temp;
     temp = parseInt(localStorage.getItem("net_price"));
-    if (!isNaN(temp)) {
-        net_price = temp;
-    }
+    if (!isNaN(temp)) net_price = temp;
     
-
     temp = parseInt(localStorage.getItem("hatchery_count"));
-    if (!isNaN(temp)) {
-        hatchery_count = temp;
-    }
-
+    if (!isNaN(temp)) hatchery_count = temp;
     temp = parseInt(localStorage.getItem("hatchery_price"));
-    if (!isNaN(temp)) {
-        hatchery_price = temp;
-    }
+    if (!isNaN(temp)) hatchery_price = temp;
     
-    // LOAD FIREFLIES
-    if (isNaN(firefly_count) || firefly_count === null) {
-        // do nothing
-    } else {
-        let counter = document.getElementById("firefly_counter");
-        counter.value = format_value(firefly_count);
-        document.title = "Emberfly, Inc. : " + firefly_count + " fireflies";
-        update_width(counter);
-    }
+    temp = parseInt(localStorage.getItem("meadow_count"));
+    if (!isNaN(temp)) meadow_count = temp;
+    temp = parseInt(localStorage.getItem("meadow_price"));
+    if (!isNaN(temp)) meadow_price = temp;
     
-    // LOAD JARS
-    if (isNaN(jar_count) || jar_count === null || isNaN(jar_price) || jar_price === null) {
-        // do nothing
-    } else {
-        let counter = document.getElementById("jar_counter");
-        let price_counter = document.getElementById("jar_price");
-        counter.value = jar_count;
-        price_counter.value = jar_price;
-        update_width(counter);
-        update_width(price_counter);
-    }
+    temp = parseInt(localStorage.getItem("lighthouse_count"));
+    if (!isNaN(temp)) lighthouse_count = temp;
+    temp = parseInt(localStorage.getItem("lighthouse_price"));
+    if (!isNaN(temp)) lighthouse_price = temp;
     
+    temp = parseInt(localStorage.getItem("garden_count"));
+    if (!isNaN(temp)) garden_count = temp;
+    temp = parseInt(localStorage.getItem("garden_price"));
+    if (!isNaN(temp)) garden_price = temp;
     
-    // LOAD NETS
-    if (isNaN(net_count) || net_count === null || isNaN(net_price) || net_price === null) {
-        // do nothing
-    } else {
-        let counter = document.getElementById("net_counter");
-        let price_counter = document.getElementById("net_price");
-        counter.value = net_count;
-        price_counter.value = net_price;
-        update_width(counter);
-        update_width(price_counter);
-    }
+    temp = parseInt(localStorage.getItem("sanctuary_count"));
+    if (!isNaN(temp)) sanctuary_count = temp;
+    temp = parseInt(localStorage.getItem("sanctuary_price"));
+    if (!isNaN(temp)) sanctuary_price = temp;
     
+    temp = parseInt(localStorage.getItem("lab_count"));
+    if (!isNaN(temp)) lab_count = temp;
+    temp = parseInt(localStorage.getItem("lab_price"));
+    if (!isNaN(temp)) lab_price = temp;
     
-    // LOAD HATCHERIES
-    if (isNaN(hatchery_count) || hatchery_count === null || isNaN(hatchery_price) || hatchery_price === null) {
-        // do nothing
-    } else {
-        let counter = document.getElementById("hatchery_counter");
-        let price_counter = document.getElementById("hatchery_price");
-        counter.value = hatchery_count;
-        price_counter.value = hatchery_price;
-        update_width(counter);
-        update_width(price_counter);
-    }
+    temp = parseInt(localStorage.getItem("forest_count"));
+    if (!isNaN(temp)) forest_count = temp;
+    temp = parseInt(localStorage.getItem("forest_price"));
+    if (!isNaN(temp)) forest_price = temp;
     
+    temp = parseInt(localStorage.getItem("pool_count"));
+    if (!isNaN(temp)) pool_count = temp;
+    temp = parseInt(localStorage.getItem("pool_price"));
+    if (!isNaN(temp)) pool_price = temp;
     
+    temp = parseInt(localStorage.getItem("festival_count"));
+    if (!isNaN(temp)) festival_count = temp;
+    temp = parseInt(localStorage.getItem("festival_price"));
+    if (!isNaN(temp)) festival_price = temp;
     
-    // LOAD UPDGRADE STATES
-    
-    
+    // Load visual upgrades
     temp = parseInt(localStorage.getItem("hasGlowworms"));
-    if (!isNaN(temp)) {
-        if(temp == 1) {
-            hasGlowworms = 1;
-        }
-    }
-    
+    if (!isNaN(temp) && temp == 1) hasGlowworms = 1;
     
     temp = parseInt(localStorage.getItem("hasAnglerfish"));
-    if (!isNaN(temp)) {
-        if(temp == 1) {
-            hasAnglerfish = 1;
-        }
+    if (!isNaN(temp) && temp == 1) hasAnglerfish = 1;
+    
+    // Load upgrades object
+    var upgradesStr = localStorage.getItem("upgrades");
+    if (upgradesStr) {
+        try {
+            var loadedUpgrades = JSON.parse(upgradesStr);
+            Object.assign(upgrades, loadedUpgrades);
+        } catch(e) {}
     }
     
-    // upgrade values are 0 by default, so there's no need to check for 0 and set them to 0.
+    update();
 }
 
-
-
-
-
-
 function update() {
-    var counter = document.getElementById("firefly_counter");
-    counter.value = format_value(firefly_count);
+    update_counter("firefly_counter", firefly_count);
     document.title = "Emberfly, Inc. : " + Math.floor(firefly_count) + " fireflies";
-    update_width(counter);
-
-
-    counter = document.getElementById("jar_counter");
-    counter.value = format_value(jar_count);
-    update_width(counter);
-
-    counter = document.getElementById("jar_price");
-    counter.value = format_value(jar_price);
-    update_width(counter);
     
-    
-    counter = document.getElementById("net_counter");
-    counter.value = format_value(net_count);
-    update_width(counter);
-
-    counter = document.getElementById("net_price");
-    counter.value = format_value(net_price);
-    update_width(counter);
-    
-
-    counter = document.getElementById("hatchery_counter");
-    counter.value = format_value(hatchery_count);
-    update_width(counter);
-
-    counter = document.getElementById("hatchery_price");
-    counter.value = format_value(hatchery_price);
-    update_width(counter);
-    
+    update_building("jar", jar_count, jar_price);
+    update_building("net", net_count, net_price);
+    update_building("hatchery", hatchery_count, hatchery_price);
+    update_building("meadow", meadow_count, meadow_price);
+    update_building("lighthouse", lighthouse_count, lighthouse_price);
+    update_building("garden", garden_count, garden_price);
+    update_building("sanctuary", sanctuary_count, sanctuary_price);
+    update_building("lab", lab_count, lab_price);
+    update_building("forest", forest_count, forest_price);
+    update_building("pool", pool_count, pool_price);
+    update_building("festival", festival_count, festival_price);
     
     update_brightness();
-    
     update_buildings();
-    
     update_upgrades();
-    
-    //update_story();
-
     save();
 }
 
+function update_counter(id, value) {
+    var counter = document.getElementById(id);
+    if (counter) {
+        counter.value = format_value(value);
+        update_width(counter);
+    }
+}
 
+function update_building(name, count, price) {
+    update_counter(name + "_counter", count);
+    update_counter(name + "_price", price);
+}
 
 function update_upgrades() {
-
-    
+    // Visual upgrades (Glow Worms, Angler Fish)
     if (hasGlowworms == 0) {
         let temp = document.getElementsByName("glowworms")[0];
         if (firefly_count >= BASE_GLOWWORMS_PRICE) {
             temp.disabled = false;
             temp.style.display = "inline-block";
             temp.style.opacity = 1;
-        }
-        else {
+        } else {
             temp.style.opacity = 0.5;
             temp.disabled = true;
         }
         
-        
-        // if don't have glowworms yet, 
-        // disable all other upgrades
-        // I want players to buy them in order.
-        // worms > fish > whatever's next
-        
-        temp = document.getElementsByName("anglerfish")[0];
-        temp.style.opacity = 0.5;
-        temp.disabled = true;
-    }
-    
-    else {
+        let temp2 = document.getElementsByName("anglerfish")[0];
+        temp2.style.opacity = 0.5;
+        temp2.disabled = true;
+    } else {
         let temp = document.getElementsByName("glowworms")[0];
         temp.disabled = true;
         temp.style.display = "none";
         temp.style.opacity = 0;
-        hasGlowworms = 1;
     }
     
-    
     if (hasAnglerfish == 0) {
-        // Disable upgrade buttons if can't afford
-
         let temp = document.getElementsByName("anglerfish")[0];
-        if (firefly_count >= BASE_ANGLERFISH_PRICE) {
-            // display only if previous upgrade(s) 
-            // has/have been bought already
-            if(hasGlowworms == 1) {
-                temp.disabled = false;
-                temp.style.display = "inline-block";
-                temp.style.opacity = 1;
-            }
-        }
-        else {
+        if (firefly_count >= BASE_ANGLERFISH_PRICE && hasGlowworms == 1) {
+            temp.disabled = false;
+            temp.style.display = "inline-block";
+            temp.style.opacity = 1;
+        } else {
             temp.style.opacity = 0.5;
             temp.disabled = true;
         }
-    }
-    else {
+    } else {
         let temp = document.getElementsByName("anglerfish")[0];
         temp.disabled = true;
         temp.style.display = "none";
         temp.style.opacity = 0;
     }
     
+    // Click power upgrades
+    update_upgrade_button("clickPower1", 1000, !upgrades.clickPower1);
+    update_upgrade_button("clickPower2", 50000, !upgrades.clickPower2 && upgrades.clickPower1);
+    update_upgrade_button("clickPower3", 1000000, !upgrades.clickPower3 && upgrades.clickPower2);
+    
+    // Building upgrades - unlock after 10 of each building
+    update_upgrade_button("jarBoost", 10000, !upgrades.jarBoost && jar_count >= 10);
+    update_upgrade_button("netBoost", 500000, !upgrades.netBoost && net_count >= 10);
+    update_upgrade_button("hatcheryBoost", 10000000, !upgrades.hatcheryBoost && hatchery_count >= 10);
+    update_upgrade_button("meadowBoost", 100000000, !upgrades.meadowBoost && meadow_count >= 10);
+    update_upgrade_button("lighthouseBoost", 2000000000, !upgrades.lighthouseBoost && lighthouse_count >= 10);
+    update_upgrade_button("gardenBoost", 50000000000, !upgrades.gardenBoost && garden_count >= 10);
+    update_upgrade_button("sanctuaryBoost", 1000000000000, !upgrades.sanctuaryBoost && sanctuary_count >= 10);
+    update_upgrade_button("labBoost", 20000000000000, !upgrades.labBoost && lab_count >= 10);
+    update_upgrade_button("forestBoost", 500000000000000, !upgrades.forestBoost && forest_count >= 10);
+    update_upgrade_button("poolBoost", 10000000000000000, !upgrades.poolBoost && pool_count >= 10);
+    update_upgrade_button("festivalBoost", 200000000000000000, !upgrades.festivalBoost && festival_count >= 10);
+    
+    // Auto-clicker
+    update_upgrade_button("autoClicker", 100000, !upgrades.autoClicker);
 }
 
-
+function update_upgrade_button(name, price, shouldShow) {
+    let btn = document.getElementsByName(name)[0];
+    if (!btn) return;
+    
+    if (shouldShow) {
+        btn.style.display = "inline-block";
+        btn.disabled = firefly_count < price;
+        btn.style.opacity = firefly_count < price ? 0.5 : 1;
+    } else {
+        btn.style.display = "none";
+    }
+}
 
 function update_buildings() {
-    let temp = document.getElementsByName("Jar")[0];
-    firefly_count < jar_price ? temp.disabled = true : temp.disabled = false;
-    
-    temp = document.getElementsByName("Net")[0];
-    firefly_count < net_price ? temp.disabled = true : temp.disabled = false;
-    
-    temp = document.getElementsByName("Hatchery")[0];
-    firefly_count < hatchery_price ? temp.disabled = true : temp.disabled = false;
+    update_building_button("Jar", jar_price);
+    update_building_button("Net", net_price);
+    update_building_button("Hatchery", hatchery_price);
+    update_building_button("Meadow", meadow_price);
+    update_building_button("Lighthouse", lighthouse_price);
+    update_building_button("Garden", garden_price);
+    update_building_button("Sanctuary", sanctuary_price);
+    update_building_button("Lab", lab_price);
+    update_building_button("Forest", forest_price);
+    update_building_button("Pool", pool_price);
+    update_building_button("Festival", festival_price);
 }
 
-
-
-
+function update_building_button(name, price) {
+    let temp = document.getElementsByName(name)[0];
+    if (temp) {
+        temp.disabled = firefly_count < price;
+    }
+}
 
 function add() {
-    firefly_count += 1;
+    firefly_count += click_power;
     update();
-    save();
 }
-
-
 
 function buy(category) {
-    if (category == JAR) {
-        if (firefly_count >= jar_price) {
-
-            firefly_count -= jar_price;
-            jar_count += 1;
-            jar_price = Math.round(Math.pow(jar_price, 1.01));
-            update();
-        } else {
-            // can't purchase. do nothing.
-        }
-     }
+    var buildings = [
+        {id: JAR, count: () => jar_count, price: () => jar_price, 
+         setCount: (v) => jar_count = v, setPrice: (v) => jar_price = v},
+        {id: NET, count: () => net_count, price: () => net_price,
+         setCount: (v) => net_count = v, setPrice: (v) => net_price = v},
+        {id: HATCHERY, count: () => hatchery_count, price: () => hatchery_price,
+         setCount: (v) => hatchery_count = v, setPrice: (v) => hatchery_price = v},
+        {id: MEADOW, count: () => meadow_count, price: () => meadow_price,
+         setCount: (v) => meadow_count = v, setPrice: (v) => meadow_price = v},
+        {id: LIGHTHOUSE, count: () => lighthouse_count, price: () => lighthouse_price,
+         setCount: (v) => lighthouse_count = v, setPrice: (v) => lighthouse_price = v},
+        {id: GARDEN, count: () => garden_count, price: () => garden_price,
+         setCount: (v) => garden_count = v, setPrice: (v) => garden_price = v},
+        {id: SANCTUARY, count: () => sanctuary_count, price: () => sanctuary_price,
+         setCount: (v) => sanctuary_count = v, setPrice: (v) => sanctuary_price = v},
+        {id: LAB, count: () => lab_count, price: () => lab_price,
+         setCount: (v) => lab_count = v, setPrice: (v) => lab_price = v},
+        {id: FOREST, count: () => forest_count, price: () => forest_price,
+         setCount: (v) => forest_count = v, setPrice: (v) => forest_price = v},
+        {id: POOL, count: () => pool_count, price: () => pool_price,
+         setCount: (v) => pool_count = v, setPrice: (v) => pool_price = v},
+        {id: FESTIVAL, count: () => festival_count, price: () => festival_price,
+         setCount: (v) => festival_count = v, setPrice: (v) => festival_price = v}
+    ];
     
-    
-    
-    else if (category == NET) {
-        if (firefly_count >= net_price) {
-
-            firefly_count -= net_price;
-            net_count += 1;
-            net_price = Math.round(Math.pow(net_price, 1.01));
-            update();
-        } else {
-            // can't purchase. do nothing.
-        }
-    }
-    
-    
-    
-    
-    else if (category == HATCHERY) {
-        if (firefly_count >= hatchery_price) {
-
-            firefly_count -= hatchery_price;
-            hatchery_count += 1;
-            hatchery_price = Math.round(Math.pow(hatchery_price, 1.01));
-            update();
-        } else {
-            // can't purchase. do nothing.
+    for (let building of buildings) {
+        if (category == building.id) {
+            let price = building.price();
+            if (firefly_count >= price) {
+                firefly_count -= price;
+                building.setCount(building.count() + 1);
+                building.setPrice(Math.round(Math.pow(price, 1.01)));
+                update();
+            }
+            return;
         }
     }
     
-    
-    
-    else if (category == GLOWWORMS){
-        
-        if (firefly_count >= BASE_GLOWWORMS_PRICE) {
-
-            let temp = document.getElementsByName("glowworms")[0];
-            
-            temp.disabled = true;
-            temp.style.display = "none";
-            temp.style.opacity = 0;
-            
-            firefly_count -= BASE_GLOWWORMS_PRICE;
-            hasGlowworms = 1;
-            max_flies = 10000000; // 10 million
-            
-            temp = document.getElementById("fireflies_text");
-            temp.innerHTML = "Glow Worms";
-            
-            temp = document.getElementById("tooltip");
-            temp.innerHTML = "Glowing worms writhe in the earth";
-            
-            set_click_image("glowworm");
-        }
-        
+    // Visual upgrades
+    if (category == GLOWWORMS && firefly_count >= BASE_GLOWWORMS_PRICE) {
+        firefly_count -= BASE_GLOWWORMS_PRICE;
+        hasGlowworms = 1;
+        max_flies = 10000000;
+        document.getElementById("fireflies_text").innerHTML = "Glow Worms";
+        document.getElementById("tooltip").innerHTML = "Glowing worms writhe in the earth";
+        set_click_image("glowworm");
+        update();
     }
     
-    
-    else if (category == ANGLERFISH){
-        
-        if (firefly_count >= BASE_ANGLERFISH_PRICE) {
-
-            let temp = document.getElementsByName("anglerfish")[0];
-            
-            temp.disabled = true;
-            temp.style.display = "none";
-            temp.style.opacity = 0;
-            
-            firefly_count -= BASE_ANGLERFISH_PRICE;
-            hasAnglerfish = 1;
-            max_flies = 100000000; // 10M
-            
-            temp = document.getElementById("fireflies_text");
-            temp.innerHTML = "Angler Fish";
-            
-            temp = document.getElementById("tooltip");
-            temp.innerHTML = "The seas teem with glowing fish";
-                              
-            set_click_image("anglerfish");
-        }
-        
+    if (category == ANGLERFISH && firefly_count >= BASE_ANGLERFISH_PRICE) {
+        firefly_count -= BASE_ANGLERFISH_PRICE;
+        hasAnglerfish = 1;
+        max_flies = 100000000;
+        document.getElementById("fireflies_text").innerHTML = "Angler Fish";
+        document.getElementById("tooltip").innerHTML = "The seas teem with glowing fish";
+        set_click_image("anglerfish");
+        update();
     }
-    
 }
 
-
-
+function buy_upgrade(upgrade_name, price) {
+    if (firefly_count >= price) {
+        firefly_count -= price;
+        upgrades[upgrade_name] = true;
+        
+        // Apply upgrade effects
+        if (upgrade_name == "clickPower1") click_power = 2;
+        if (upgrade_name == "clickPower2") click_power = 5;
+        if (upgrade_name == "clickPower3") click_power = 10;
+        if (upgrade_name == "autoClicker") {
+            setInterval(() => add(), 1000);
+        }
+        
+        update();
+    }
+}
 
 function update_width(thing) {
     thing.style.width = thing.value.length + 1 + "ch";
 }
 
-
-
 function calculate_brightness() {
-    let percent =  1 * firefly_count / max_flies;
-
+    let percent = firefly_count / max_flies;
+    
     if (percent < 0.3) {
         percent = percent * 2;
-        if(percent > 0.3) {
-            percent = 0.3;
-            return percent;
-        }
-    }
-    
-    else if (percent < 0.5) {
+        if(percent > 0.3) percent = 0.3;
+    } else if (percent < 0.5) {
         percent = percent * 1.5;
-        if(percent > 0.5) {
-            percent = 0.5;
-            return percent;
-        }
-    }
-    
-    else if (percent > 1) {
+        if(percent > 0.5) percent = 0.5;
+    } else if (percent > 1) {
         percent = 1;
-        return percent;
     }
     
     return percent;
 }
 
-
-
 function update_brightness() {
-
-    // max_flies = # of flies required to reach 100% brightness
     var percent = calculate_brightness();
-    
-    
-    var wrapper = document.getElementById("wrapper");
-    var main = document.getElementById("main");
     var temp = document.getElementById("background_gradient");
-    
+    var main = document.getElementById("main");
     
     if (hasAnglerfish == 1) {
-        
-        // rgba(255, 200, 255, 0.5), rgba(255, 0, 0, 0.5)
-        
-        temp.style.backgroundImage = "-moz-radial-gradient(rgba(255, 100, 255, 1), rgba(255, 0, 0, 0.5))";
-        temp.style.backgroundImage = "-webkit-radial-gradient(rgba(255, 100, 255, 1), rgba(255, 0, 0, 0.5))";
-        temp.style.backgroundImage = "-ms-radial-gradient(rgba(255, 100, 255, 1), rgba(255, 0, 0, 0.5))";
         temp.style.backgroundImage = "radial-gradient(rgba(255, 100, 255, 1), rgba(255, 0, 0, 0.5))";
         temp.style.opacity = percent/2;
-        
-        
         main.style.background = "rgba(0,0,255," + percent/5 + ")";
-        main.style.boxShadow = "0px -10px 50px 50px inset rgba(0, 200, 255," + percent / 3 + ")"; // 250, 200, 0
-        
-    }
-    
-    
-    else if (hasGlowworms == 1) {
-        temp.style.backgroundImage = "-moz-radial-gradient(rgba(100, 200, 0, " + percent/1.3 + "), rgba(0, 0, 255, 0.05))";
-        temp.style.backgroundImage = "-webkit-radial-gradient(rgba(100, 200, 0, " + percent/1.3 + "), rgba(0, 0, 255, 0.05))";
-        temp.style.backgroundImage = "-ms-radial-gradient(rgba(100, 200, 0, " + percent/1.3 + "), rgba(0, 0, 255, 0.05))";
+        main.style.boxShadow = "0px -10px 50px 50px inset rgba(0, 200, 255," + percent / 3 + ")";
+    } else if (hasGlowworms == 1) {
         temp.style.backgroundImage = "radial-gradient(rgba(100, 200, 0, " + percent/1.3 + "), rgba(0, 0, 255, 0.05))";
         temp.style.opacity = percent;
-        
-        
-        
         main.style.background = "rgba(0,150,0," + percent / 5 + ")";
         main.style.boxShadow = "0px -10px 50px 50px inset rgba(220, 255, 0," + percent / 3 + ")";
-    }
-    
-    
-    if (hasGlowworms == 0) {
-        temp.style.backgroundImage = "-moz-radial-gradient(rgba(200, 130, 20, " + percent.toString() + "), rgba(0, 0, 0, 0.1))";
-        temp.style.backgroundImage = "-webkit-radial-gradient(rgba(200, 100, 0, " + percent.toString() + "), rgba(0, 0, 0, 0.1))";
-        temp.style.backgroundImage = "-ms-radial-gradient(rgba(200, 130, 20, " + percent.toString() + "), rgba(0, 0, 0, 0.1))";
+    } else {
         temp.style.backgroundImage = "radial-gradient(rgba(200, 100, 0, " + percent.toString() + "), rgba(0, 0, 0, 0.1))";
         temp.style.opacity = percent;
-        
-        
         main.style.background = "rgba(150,102,10," + percent / 5 + ")";
-        main.style.boxShadow = "0px -10px 50px 50px inset rgba(250, 200, 50," + percent / 3 + ")"; // 250, 200, 0
-        
+        main.style.boxShadow = "0px -10px 50px 50px inset rgba(250, 200, 50," + percent / 3 + ")";
     }
-    
-    
-    
     
     update_font_colors(percent);
 }
 
-
-
-
-
 function update_font_colors(percent) {
-
-    
     function max255(num) {
-        if (num > 255) {
-            return 255;
-        } else {
-            return Math.floor(num);
-        }
+        return num > 255 ? 255 : Math.floor(num);
     }
-
-    function min0(num) {
-        if (num < 0) {
-            return 0;
-        } else {
-            return Math.floor(num);
-        }
-    }
-
-    
-    
-    // Update the special fireflies/angler/glowworm font gradient:
     
     function change_firefly_font(rgb1, rgb2) {
         let font = document.getElementsByClassName("fireflies");
         for (let i = 0; i < font.length; i++) {
-            font[i].style.background = "-webkit-linear-gradient(top, rgb(" + max255(rgb1[0]) + "," + max255(rgb1[1]) + "," + max255(rgb1[2]) + "), rgb(" + max255(rgb2[0]) + "," + max255(rgb2[1]) + "," + max255(rgb2[2]) + "))";
-            font[i].style.background = "-moz-linear-gradient(top, rgb(" + max255(rgb1[0]) + "," + max255(rgb1[1]) + "," + max255(rgb1[2]) + "), rgb(" + max255(rgb2[0]) + "," + max255(rgb2[1]) + "," + max255(rgb2[2]) + "))";
-            font[i].style.background = "-ms-linear-gradient(top, rgb(" + max255(rgb1[0]) + "," + max255(rgb1[1]) + "," + max255(rgb1[2]) + "), rgb(" + max255(rgb2[0]) + "," + max255(rgb2[1]) + "," + max255(rgb2[2]) + "))";
-            font[i].style.background = "linear-gradient(top, rgb(" + max255(rgb1[0]) + "," + max255(rgb1[1]) + "," + max255(rgb1[2]) + "), rgb(" + max255(rgb2[0]) + "," + max255(rgb2[1]) + "," + max255(rgb2[2]) + "))";
-
+            let gradient = "linear-gradient(top, rgb(" + max255(rgb1[0]) + "," + max255(rgb1[1]) + "," + max255(rgb1[2]) + "), rgb(" + max255(rgb2[0]) + "," + max255(rgb2[1]) + "," + max255(rgb2[2]) + "))";
+            font[i].style.background = gradient;
             font[i].style.webkitBackgroundClip = "text";
-            font[i].style.MozbackgroundClip = "text";
             font[i].style.backgroundClip = "text";
         }
     }
     
-    
-    
     if (hasAnglerfish == 1) {
-        
         let rgb1 = [255 * percent + 50, 255 * percent + 50, 255 * percent + 255];
         let rgb2 = [255 * percent + 100, 255 * percent + 0, 255 * percent + 100];
-        
         change_firefly_font(rgb1, rgb2);
-    }
-    
-    
-    else if (hasGlowworms == 1) {
-        
+    } else if (hasGlowworms == 1) {
         let rgb1 = [255 * percent + 200, 255 * percent + 255, 255 * percent + 20];
         let rgb2 = [255 * percent + 70, 255 * percent + 105, 255 * percent + 0];
         change_firefly_font(rgb1, rgb2);
-        
-    }
-    
-    
-    else {
-        
+    } else {
         let rgb1 = [255 * percent + 235, 255 * percent + 173, 255 * percent + 0];
         let rgb2 = [255 * percent + 183, 255 * percent + 24, 255 * percent + 0];
         change_firefly_font(rgb1, rgb2);
     }
     
-    
-    
-    
-    // Update all the other fonts now:
-    
-    
-    
+    let buildingColor, counterColor, titleColor;
     
     if (hasAnglerfish == 1) {
-        font = document.getElementsByClassName("building");
-        for (let i = 0; i < font.length; i++) {
-            font[i].style.color = "rgb(" + max255(255 * percent + 255) + "," + max255(255 * percent + 160) + "," + max255(255 * percent + 0) + ")";
-        }
-
-        font = document.getElementsByClassName("counter");
-        for (let i = 0; i < font.length; i++) {
-            font[i].style.color = "rgb(" + max255(255 * percent + 255) + "," + max255(255 * percent + 232) + "," + max255(255 * percent + 56) + ")";
-        }
-
-        font = document.getElementsByClassName("price");
-        for (let i = 0; i < font.length; i++) {
-            font[i].style.color = "rgb(" + max255(255 * percent + 255) + "," + max255(255 * percent + 232) + "," + max255(255 * percent + 56) + ")";
-        }
-
-        font = document.getElementsByClassName("title");
-        for (let i = 0; i < font.length; i++) {
-            font[i].style.color = "rgb(" + max255(255 * percent + 224) + "," + max255(255 * percent + 238) + "," + max255(255 * percent + 199) + ")";
-        }
+        buildingColor = "rgb(" + max255(255 * percent + 255) + "," + max255(255 * percent + 160) + ",0)";
+        counterColor = "rgb(" + max255(255 * percent + 255) + "," + max255(255 * percent + 232) + "," + max255(255 * percent + 56) + ")";
+        titleColor = "rgb(" + max255(255 * percent + 224) + "," + max255(255 * percent + 238) + "," + max255(255 * percent + 199) + ")";
+    } else if (hasGlowworms == 1) {
+        buildingColor = "rgb(" + max255(255 * percent + 80) + "," + max255(255 * percent + 185) + "," + max255(255 * percent + 30) + ")";
+        counterColor = "rgb(" + max255(255 * percent + 175) + "," + max255(255 * percent + 255) + ",0)";
+        titleColor = "rgb(" + max255(255 * percent + 225) + "," + max255(255 * percent + 255) + "," + max255(255 * percent + 200) + ")";
+    } else {
+        buildingColor = "rgb(" + max255(255 * percent + 255) + "," + max255(255 * percent + 160) + ",0)";
+        counterColor = "rgb(" + max255(255 * percent + 255) + "," + max255(255 * percent + 232) + "," + max255(255 * percent + 56) + ")";
+        titleColor = "rgb(" + max255(255 * percent + 224) + "," + max255(255 * percent + 238) + "," + max255(255 * percent + 199) + ")";
     }
     
+    let fonts = [
+        {className: "building", color: buildingColor},
+        {className: "counter", color: counterColor},
+        {className: "price", color: counterColor},
+        {className: "title", color: titleColor}
+    ];
     
-    else if (hasGlowworms == 1) {
-        font = document.getElementsByClassName("building");
-        for (let i = 0; i < font.length; i++) {
-            font[i].style.color = "rgb(" + max255(255 * percent + 80) + "," + max255(255 * percent + 185) + "," + max255(255 * percent + 30) + ")";
+    fonts.forEach(({className, color}) => {
+        let elements = document.getElementsByClassName(className);
+        for (let i = 0; i < elements.length; i++) {
+            elements[i].style.color = color;
         }
-
-        font = document.getElementsByClassName("counter");
-        for (let i = 0; i < font.length; i++) {
-            font[i].style.color = "rgb(" + max255(255 * percent + 175) + "," + max255(255 * percent + 255) + "," + max255(255 * percent + 0) + ")";
-        }
-
-        font = document.getElementsByClassName("price");
-        for (let i = 0; i < font.length; i++) {
-            font[i].style.color = "rgb(" + max255(255 * percent + 175) + "," + max255(255 * percent + 255) + "," + max255(255 * percent + 0) + ")";
-        }
-
-        font = document.getElementsByClassName("title");
-        for (let i = 0; i < font.length; i++) {
-            font[i].style.color = "rgb(" + max255(255 * percent + 225) + "," + max255(255 * percent + 255) + "," + max255(255 * percent + 200) + ")";
-        }
-    }
-    
-    else {
-
-        font = document.getElementsByClassName("building");
-        for (let i = 0; i < font.length; i++) {
-            font[i].style.color = "rgb(" + max255(255 * percent + 255) + "," + max255(255 * percent + 160) + "," + max255(255 * percent + 0) + ")";
-        }
-
-        font = document.getElementsByClassName("counter");
-        for (let i = 0; i < font.length; i++) {
-            font[i].style.color = "rgb(" + max255(255 * percent + 255) + "," + max255(255 * percent + 232) + "," + max255(255 * percent + 56) + ")";
-        }
-
-        font = document.getElementsByClassName("price");
-        for (let i = 0; i < font.length; i++) {
-            font[i].style.color = "rgb(" + max255(255 * percent + 255) + "," + max255(255 * percent + 232) + "," + max255(255 * percent + 56) + ")";
-        }
-
-        font = document.getElementsByClassName("title");
-        for (let i = 0; i < font.length; i++) {
-            font[i].style.color = "rgb(" + max255(255 * percent + 224) + "," + max255(255 * percent + 238) + "," + max255(255 * percent + 199) + ")";
-        }
-    }
-    
-    
-    
-    
+    });
 }
 
-
-
-
-
 function reset() {
-    var answer = confirm("Are you sure you want to reset? Your progress will be deleted.")
+    var answer = confirm("Are you sure you want to reset? Your progress will be deleted.");
     if (answer == true) {
-        firefly_count = BASE_FIREFLY_COUNT;
-        
-        jar_count = BASE_JAR_COUNT;
-        jar_price = BASE_JAR_PRICE;
-        
-        net_count = BASE_NET_COUNT;
-        net_price = BASE_NET_PRICE;
-        
-        hatchery_count = BASE_HATCHERY_COUNT;
-        hatchery_price = BASE_HATCHERY_PRICE;
-
-        reset_upgrades();
-
-        update();
+        localStorage.clear();
+        location.reload();
     }
 }
 
 function reset_upgrades() {
-    //document.getElementsByClassName("upgrade").disabled = false;
-
-    
-    let temp = document.getElementsByName("glowworms")[0];
-    if (firefly_count < BASE_GLOWWORMS_PRICE) {
-        temp.disabled = true;
-        temp.style.display = "none";
-        temp.style.opacity = 0;
-    }
-    
-    temp = document.getElementsByName("anglerfish")[0];
-    if (firefly_count < BASE_ANGLERFISH_PRICE) {
-        temp.disabled = true;
-        temp.style.display = "none";
-        temp.style.opacity = 0;
-    }
-
-    
-    
-    hasAnglerfish = 0;
     hasGlowworms = 0;
-    
-    // change clickable image back to default
+    hasAnglerfish = 0;
     set_click_image("emberfly");
-    
-    
-    temp = document.getElementById("fireflies_text");
-    temp.innerHTML = "Fireflies";
-            
-    temp = document.getElementById("tooltip");
-    temp.innerHTML = "Fireflies flutter in our midst";
-    
+    document.getElementById("fireflies_text").innerHTML = "Fireflies";
+    document.getElementById("tooltip").innerHTML = "Fireflies flutter in our midst";
+    update();
 }
 
-
-
 function timer() {
-    
-    // Take fireflies per second (Fps) and divide by 4
-    // so Jars give 1 Fps. So here put 0.25 * jar_count.
-    
     firefly_count = firefly_count + calculate_reward(0.25);
-    
-    
     update();
 }
 setInterval(timer, 250);
 
-
 function set_tooltip(tip) {
     var temp = document.getElementById("tooltip");
-    
-    //temp.innerHTML = "" + tip;
-    
-    if(tip == "JAR") {
-        if(jar_count > 0)
-            temp.innerHTML = "Jars catch " + format_value(calculate_building_reward("JAR")) + " per second";
-        else 
-            temp.innerHTML = "Jars catch " + format_value(BASE_JAR_REWARD) + " per second";
-    }
-    else if (tip == "NET") {
-        if(net_count > 0)
-            temp.innerHTML = "Nets catch " + format_value(calculate_building_reward("NET")) + " per second";
-        else 
-            temp.innerHTML = "Nets catch " + format_value(BASE_NET_REWARD) + " per second";
-    }
-    else if (tip == "HATCHERY") {
-        if(hatchery_count > 0)
-            temp.innerHTML = "Hatcheries incubate " + format_value(calculate_building_reward("HATCHERY")) + " per second";
-        else 
-            temp.innerHTML = "Hatcheries incubate " + format_value(BASE_HATCHERY_REWARD) + " per second";  
-    }
-    else if (tip == "JAR_FPS") {
-        if(jar_count > 0)
-            temp.innerHTML = "Jars are catching " + format_value(calculate_building_reward("JAR")*jar_count) + " per second";
-        else 
-            temp.innerHTML = "Jars are catching " + format_value(BASE_JAR_REWARD*jar_count) + " per second";
-    }
-    else if (tip == "NET_FPS") {
-        if(net_count > 0)
-            temp.innerHTML = "Nets are catching " + format_value(calculate_building_reward("NET")*net_count) + " per second";
-        else 
-            temp.innerHTML = "Nets are catching " + format_value(BASE_NET_REWARD*net_count) + " per second";
-    }
-    else if (tip == "HATCHERY_FPS") {
-        if(hatchery_count > 0)
-            temp.innerHTML = "Hatcheries are incubating " + format_value(calculate_building_reward("HATCHERY")*hatchery_count) + "/sec";
-        else 
-            temp.innerHTML = "Hatcheries are incubating " + format_value(BASE_HATCHERY_REWARD*hatchery_count) + "/sec";
-    }
-    
-    else if (tip == "GLOWWORMS") {
-        temp.innerHTML = "Worms.. that glow";
-        
-    }
-    
-    else if (tip == "ANGLERFISH") {
-        temp.innerHTML = "Perhaps these could be useful?";
-        
-    }
-    
-    else if (tip == "TOTAL_FPS") {
-        temp.innerHTML = "Buildings give " + format_value(calculate_reward(1)) + " per second";
-        
-    }
-    
-    else if (tip=="BLANK") {
-        temp.innerHTML = "&nbsp;";
-    }
-    
-    else if (tip == "BUILDING") {
-        temp.innerHTML = "You have " + (jar_count + net_count + hatchery_count) + " buildings";
-        
-    }
-    
-    else if (tip == "COUNT") {
-        temp.innerHTML = "Total production is  " + format_value(calculate_reward(1)) + " per second";
-        
-    }
-    
-    else if (tip == "PRICE") {
-        temp.innerHTML = " ";
-        
-    }
-    
-    else if (tip == "CLICKING") {
-        temp.innerHTML = "You catch 1 at a time";
-        
-    }
-    
-}
-
-
-
-function set_click_image(img) {
-    
-    let images = ["emberfly", "glowworm", "anglerfish"];
-    
-    
-    for(elem of images) {
-        if (img == elem) {
-            let temp = document.getElementById(elem);
-            temp.style.display = "inline-block";
-        }
-        else {
-            let temp = document.getElementById(elem);
-            temp.style.display = "none";
-        }
-    }
-}
-
-
-
-if ('addEventListener' in window) {
-    window.addEventListener('load', load());
-}
+    var tooltips = {
+        "JAR": "Jars catch " + format_value(BASE_JAR_REWARD * (upgrades.jarBoost ? 2 : 1)) + " per second",
+        "NET": "Nets catch " + format_value(BASE_NET_REWARD * (upgrades.netBoost ? 2 : 1)) + "
