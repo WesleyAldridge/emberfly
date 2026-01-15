@@ -379,11 +379,12 @@
         -webkit-tap-highlight-color:  rgba(255, 255, 255, 0);
     }
 
-    button.upgrade {
-    display:none;
-    opacity:1;
-    width: 250px;
+    /* Make all upgrade buttons the same width */
+button.upgrade {
+    width: 250px; /* Fixed width for all upgrade buttons */
     text-align: center;
+    padding: 0.5em 0.75em; /* More padding for multi-line text */
+    line-height: 1.3em;
 }
 
     button.reset {
@@ -397,14 +398,14 @@
 
     button.building {
     min-width: 12ch;
-    width: auto;
-    max-width: 20ch;
+    width: auto; /* Allow buttons to grow based on content */
+    max-width: 20ch; /* Set a reasonable maximum */
     color: rgb(255,160,0);
-    line-height: 1.5em;
-    font-size: 1.15em;
+    line-height: 1.3em;
+    font-size: 1.15em; /* Slightly smaller than 1.3em */
     letter-spacing: 0.01em;
-    padding: 0 0.75em;
-    white-space: normal;
+    padding: 0.5em 0.75em; /* More vertical padding for two lines */
+    white-space: normal; /* Allow text to wrap if needed */
     word-wrap: break-word;
     text-align: center;
 }
@@ -533,14 +534,15 @@
 
 
 
-		@media screen and (max-width: 480px) {
+		/* For mobile devices, make them even more flexible */
+@media screen and (max-width: 480px) {
     button.building {
-        font-size: 1.0em;
+        font-size: 1.0em; /* Even smaller on mobile */
         max-width: 18ch;
     }
     
     button.upgrade {
-        width: 200px;
+        width: 200px; /* Slightly narrower on mobile */
     }
 }
 
