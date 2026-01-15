@@ -395,12 +395,18 @@
     }
 
     button.building {
-        width:12ch;
-        color: rgb(255,160,0);
-        line-height: 1.5em;
-        font-size: 1.3em;
-		letter-spacing: 0.01em;
-    }
+    min-width: 12ch;
+    width: auto; /* Allow buttons to grow based on content */
+    max-width: 20ch; /* Set a reasonable maximum */
+    color: rgb(255,160,0);
+    line-height: 1.5em;
+    font-size: 1.15em; /* Slightly smaller than 1.3em */
+    letter-spacing: 0.01em;
+    padding: 0 0.75em; /* Adjust padding for better fit */
+    white-space: normal; /* Allow text to wrap if needed */
+    word-wrap: break-word;
+    text-align: center;
+}
 
 		button:hover,
         button.building:hover {
@@ -526,6 +532,10 @@
 
 
 		@media screen and (max-width: 480px) {
+			button.building {
+        font-size: 1.0em; /* Even smaller on mobile */
+        max-width: 18ch;
+    }
 
 			#main {
 				padding: 2em 2em 2.5em 2em ;
