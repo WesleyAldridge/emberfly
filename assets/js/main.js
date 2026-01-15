@@ -118,6 +118,39 @@ var upgrades = {
 
 var autoClickerInterval = null;
 
+// Track which buildings/upgrades have been revealed to the user
+var revealed = {
+    jar: true,  // Always visible from start
+    net: false,
+    hatchery: false,
+    meadow: false,
+    lighthouse: false,
+    garden: false,
+    sanctuary: false,
+    lab: false,
+    forest: false,
+    pool: false,
+    festival: false,
+    // Upgrades
+    glowworms: false,
+    anglerfish: false,
+    clickPower1: true,  // First upgrade always visible
+    clickPower2: false,
+    clickPower3: false,
+    jarBoost: false,
+    netBoost: false,
+    hatcheryBoost: false,
+    meadowBoost: false,
+    lighthouseBoost: false,
+    gardenBoost: false,
+    sanctuaryBoost: false,
+    labBoost: false,
+    forestBoost: false,
+    poolBoost: false,
+    festivalBoost: false,
+    autoClicker: false
+};
+
 function calculate_reward(seconds) {
     let base_production = BASE_JAR_REWARD * jar_count * (upgrades.jarBoost ? 2 : 1)
                         + BASE_NET_REWARD * net_count * (upgrades.netBoost ? 2 : 1)
@@ -202,6 +235,7 @@ function save() {
     localStorage.setItem("hasGlowworms", hasGlowworms);
     localStorage.setItem("hasAnglerfish", hasAnglerfish);
     localStorage.setItem("upgrades", JSON.stringify(upgrades));
+    localStorage.setItem("revealed", JSON.stringify(revealed));
 }
 
 function load() {
@@ -291,10 +325,56 @@ function load() {
         } catch(e) {}
     }
     
+    // Load revealed object
+    var revealedStr = localStorage.getItem("revealed");
+    if (revealedStr) {
+        try {
+            var loadedRevealed = JSON.parse(revealedStr);
+            Object.assign(revealed, loadedRevealed);
+        } catch(e) {}
+    }
+    
     update();
 }
 
+function check_revelations() {
+    // Check buildings - reveal when player has >= 1/10th the price
+    if (!revealed.net && firefly_count >= BASE_NET_PRICE / 10) revealed.net = true;
+    if (!revealed.hatchery && firefly_count >= BASE_HATCHERY_PRICE / 10) revealed.hatchery = true;
+    if (!revealed.meadow && firefly_count >= BASE_MEADOW_PRICE / 10) revealed.meadow = true;
+    if (!revealed.lighthouse && firefly_count >= BASE_LIGHTHOUSE_PRICE / 10) revealed.lighthouse = true;
+    if (!revealed.garden && firefly_count >= BASE_GARDEN_PRICE / 10) revealed.garden = true;
+    if (!revealed.sanctuary && firefly_count >= BASE_SANCTUARY_PRICE / 10) revealed.sanctuary = true;
+    if (!revealed.lab && firefly_count >= BASE_LAB_PRICE / 10) revealed.lab = true;
+    if (!revealed.forest && firefly_count >= BASE_FOREST_PRICE / 10) revealed.forest = true;
+    if (!revealed.pool && firefly_count >= BASE_POOL_PRICE / 10) revealed.pool = true;
+    if (!revealed.festival && firefly_count >= BASE_FESTIVAL_PRICE / 10) revealed.festival = true;
+    
+    // Check upgrades
+    if (!revealed.glowworms && firefly_count >= BASE_GLOWWORMS_PRICE / 10) revealed.glowworms = true;
+    if (!revealed.anglerfish && firefly_count >= BASE_ANGLERFISH_PRICE / 10 && hasGlowworms == 1) revealed.anglerfish = true;
+    
+    if (!revealed.clickPower2 && firefly_count >= 5000 && upgrades.clickPower1) revealed.clickPower2 = true;
+    if (!revealed.clickPower3 && firefly_count >= 100000 && upgrades.clickPower2) revealed.clickPower3 = true;
+    
+    if (!revealed.jarBoost && firefly_count >= 1000 && jar_count >= 10) revealed.jarBoost = true;
+    if (!revealed.netBoost && firefly_count >= 50000 && net_count >= 10) revealed.netBoost = true;
+    if (!revealed.hatcheryBoost && firefly_count >= 1000000 && hatchery_count >= 10) revealed.hatcheryBoost = true;
+    if (!revealed.meadowBoost && firefly_count >= 10000000 && meadow_count >= 10) revealed.meadowBoost = true;
+    if (!revealed.lighthouseBoost && firefly_count >= 200000000 && lighthouse_count >= 10) revealed.lighthouseBoost = true;
+    if (!revealed.gardenBoost && firefly_count >= 5000000000 && garden_count >= 10) revealed.gardenBoost = true;
+    if (!revealed.sanctuaryBoost && firefly_count >= 100000000000 && sanctuary_count >= 10) revealed.sanctuaryBoost = true;
+    if (!revealed.labBoost && firefly_count >= 2000000000000 && lab_count >= 10) revealed.labBoost = true;
+    if (!revealed.forestBoost && firefly_count >= 50000000000000 && forest_count >= 10) revealed.forestBoost = true;
+    if (!revealed.poolBoost && firefly_count >= 1000000000000000 && pool_count >= 10) revealed.poolBoost = true;
+    if (!revealed.festivalBoost && firefly_count >= 20000000000000000 && festival_count >= 10) revealed.festivalBoost = true;
+    
+    if (!revealed.autoClicker && firefly_count >= 10000) revealed.autoClicker = true;
+}
+
 function update() {
+    check_revelations();
+    
     update_counter("firefly_counter", firefly_count);
     document.title = "Emberfly, Inc. : " + Math.floor(firefly_count) + " fireflies";
     
@@ -331,41 +411,59 @@ function update_building(name, count, price) {
 
 function update_upgrades() {
     // Visual upgrades (Glow Worms, Angler Fish)
-    if (hasGlowworms == 0) {
+    if (hasGlowworms == 0 && revealed.glowworms) {
         let temp = document.getElementsByName("glowworms")[0];
+        let container = temp.parentElement;
         if (firefly_count >= BASE_GLOWWORMS_PRICE) {
             temp.disabled = false;
             temp.style.display = "inline-block";
+            container.style.display = "block";
             temp.style.opacity = 1;
         } else {
             temp.style.opacity = 0.5;
             temp.disabled = true;
+            temp.style.display = "inline-block";
+            container.style.display = "block";
         }
         
         let temp2 = document.getElementsByName("anglerfish")[0];
         temp2.style.opacity = 0.5;
         temp2.disabled = true;
+    } else if (hasGlowworms == 0) {
+        let temp = document.getElementsByName("glowworms")[0];
+        temp.style.display = "none";
+        temp.parentElement.style.display = "none";
     } else {
         let temp = document.getElementsByName("glowworms")[0];
         temp.disabled = true;
         temp.style.display = "none";
+        temp.parentElement.style.display = "none";
         temp.style.opacity = 0;
     }
     
-    if (hasAnglerfish == 0) {
+    if (hasAnglerfish == 0 && revealed.anglerfish) {
         let temp = document.getElementsByName("anglerfish")[0];
+        let container = temp.parentElement;
         if (firefly_count >= BASE_ANGLERFISH_PRICE && hasGlowworms == 1) {
             temp.disabled = false;
             temp.style.display = "inline-block";
+            container.style.display = "block";
             temp.style.opacity = 1;
         } else {
             temp.style.opacity = 0.5;
             temp.disabled = true;
+            temp.style.display = "inline-block";
+            container.style.display = "block";
         }
+    } else if (hasAnglerfish == 0) {
+        let temp = document.getElementsByName("anglerfish")[0];
+        temp.style.display = "none";
+        temp.parentElement.style.display = "none";
     } else {
         let temp = document.getElementsByName("anglerfish")[0];
         temp.disabled = true;
         temp.style.display = "none";
+        temp.parentElement.style.display = "none";
         temp.style.opacity = 0;
     }
     
@@ -398,33 +496,31 @@ function check_upgrades_section_visibility() {
     let section = document.getElementById("upgrades_section");
     if (!section) return;
     
-    // Check if ANY upgrade should be visible
+    // Check if ANY upgrade should be visible (revealed AND unlockable)
     let hasVisibleUpgrade = false;
     
     // Check visual upgrades
-    if (firefly_count >= BASE_GLOWWORMS_PRICE && hasGlowworms == 0) hasVisibleUpgrade = true;
-    if (firefly_count >= BASE_ANGLERFISH_PRICE && hasAnglerfish == 0 && hasGlowworms == 1) hasVisibleUpgrade = true;
+    if (revealed.glowworms && firefly_count >= BASE_GLOWWORMS_PRICE && hasGlowworms == 0) hasVisibleUpgrade = true;
+    if (revealed.anglerfish && firefly_count >= BASE_ANGLERFISH_PRICE && hasAnglerfish == 0 && hasGlowworms == 1) hasVisibleUpgrade = true;
     
-    // Check click upgrades
-    if (!upgrades.clickPower1) hasVisibleUpgrade = true;
-    if (!upgrades.clickPower2 && upgrades.clickPower1) hasVisibleUpgrade = true;
-    if (!upgrades.clickPower3 && upgrades.clickPower2) hasVisibleUpgrade = true;
-    
-    // Check building upgrades
-    if (!upgrades.jarBoost && jar_count >= 10) hasVisibleUpgrade = true;
-    if (!upgrades.netBoost && net_count >= 10) hasVisibleUpgrade = true;
-    if (!upgrades.hatcheryBoost && hatchery_count >= 10) hasVisibleUpgrade = true;
-    if (!upgrades.meadowBoost && meadow_count >= 10) hasVisibleUpgrade = true;
-    if (!upgrades.lighthouseBoost && lighthouse_count >= 10) hasVisibleUpgrade = true;
-    if (!upgrades.gardenBoost && garden_count >= 10) hasVisibleUpgrade = true;
-    if (!upgrades.sanctuaryBoost && sanctuary_count >= 10) hasVisibleUpgrade = true;
-    if (!upgrades.labBoost && lab_count >= 10) hasVisibleUpgrade = true;
-    if (!upgrades.forestBoost && forest_count >= 10) hasVisibleUpgrade = true;
-    if (!upgrades.poolBoost && pool_count >= 10) hasVisibleUpgrade = true;
-    if (!upgrades.festivalBoost && festival_count >= 10) hasVisibleUpgrade = true;
-    
-    // Check auto-clicker
-    if (!upgrades.autoClicker) hasVisibleUpgrade = true;
+    // Check if ANY revealed upgrade is available
+    if (revealed.glowworms && hasGlowworms == 0) hasVisibleUpgrade = true;
+    if (revealed.anglerfish && hasAnglerfish == 0 && hasGlowworms == 1) hasVisibleUpgrade = true;
+    if (revealed.clickPower1 && !upgrades.clickPower1) hasVisibleUpgrade = true;
+    if (revealed.clickPower2 && !upgrades.clickPower2 && upgrades.clickPower1) hasVisibleUpgrade = true;
+    if (revealed.clickPower3 && !upgrades.clickPower3 && upgrades.clickPower2) hasVisibleUpgrade = true;
+    if (revealed.jarBoost && !upgrades.jarBoost && jar_count >= 10) hasVisibleUpgrade = true;
+    if (revealed.netBoost && !upgrades.netBoost && net_count >= 10) hasVisibleUpgrade = true;
+    if (revealed.hatcheryBoost && !upgrades.hatcheryBoost && hatchery_count >= 10) hasVisibleUpgrade = true;
+    if (revealed.meadowBoost && !upgrades.meadowBoost && meadow_count >= 10) hasVisibleUpgrade = true;
+    if (revealed.lighthouseBoost && !upgrades.lighthouseBoost && lighthouse_count >= 10) hasVisibleUpgrade = true;
+    if (revealed.gardenBoost && !upgrades.gardenBoost && garden_count >= 10) hasVisibleUpgrade = true;
+    if (revealed.sanctuaryBoost && !upgrades.sanctuaryBoost && sanctuary_count >= 10) hasVisibleUpgrade = true;
+    if (revealed.labBoost && !upgrades.labBoost && lab_count >= 10) hasVisibleUpgrade = true;
+    if (revealed.forestBoost && !upgrades.forestBoost && forest_count >= 10) hasVisibleUpgrade = true;
+    if (revealed.poolBoost && !upgrades.poolBoost && pool_count >= 10) hasVisibleUpgrade = true;
+    if (revealed.festivalBoost && !upgrades.festivalBoost && festival_count >= 10) hasVisibleUpgrade = true;
+    if (revealed.autoClicker && !upgrades.autoClicker) hasVisibleUpgrade = true;
     
     section.style.display = hasVisibleUpgrade ? "block" : "none";
 }
@@ -433,32 +529,43 @@ function update_upgrade_button(name, price, shouldShow) {
     let btn = document.getElementsByName(name)[0];
     if (!btn) return;
     
-    if (shouldShow) {
+    // Check if this upgrade has been revealed
+    let isRevealed = revealed[name];
+    
+    if (shouldShow && isRevealed) {
         btn.style.display = "inline-block";
+        let container = btn.parentElement;
+        if (container) container.style.display = "block";
         btn.disabled = firefly_count < price;
         btn.style.opacity = firefly_count < price ? 0.5 : 1;
     } else {
         btn.style.display = "none";
+        let container = btn.parentElement;
+        if (container) container.style.display = "none";
     }
 }
 
 function update_buildings() {
-    update_building_button("Jar", jar_price);
-    update_building_button("Net", net_price);
-    update_building_button("Hatchery", hatchery_price);
-    update_building_button("Meadow", meadow_price);
-    update_building_button("Lighthouse", lighthouse_price);
-    update_building_button("Garden", garden_price);
-    update_building_button("Sanctuary", sanctuary_price);
-    update_building_button("Lab", lab_price);
-    update_building_button("Forest", forest_price);
-    update_building_button("Pool", pool_price);
-    update_building_button("Festival", festival_price);
+    if (revealed.jar) update_building_button("Jar", jar_price);
+    if (revealed.net) update_building_button("Net", net_price);
+    if (revealed.hatchery) update_building_button("Hatchery", hatchery_price);
+    if (revealed.meadow) update_building_button("Meadow", meadow_price);
+    if (revealed.lighthouse) update_building_button("Lighthouse", lighthouse_price);
+    if (revealed.garden) update_building_button("Garden", garden_price);
+    if (revealed.sanctuary) update_building_button("Sanctuary", sanctuary_price);
+    if (revealed.lab) update_building_button("Lab", lab_price);
+    if (revealed.forest) update_building_button("Forest", forest_price);
+    if (revealed.pool) update_building_button("Pool", pool_price);
+    if (revealed.festival) update_building_button("Festival", festival_price);
 }
 
 function update_building_button(name, price) {
     let temp = document.getElementsByName(name)[0];
     if (temp) {
+        let row = temp.closest('tr');
+        if (row) {
+            row.style.display = 'table-row';
+        }
         temp.disabled = firefly_count < price;
     }
 }
